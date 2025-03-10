@@ -7,11 +7,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Cliente.Orden.DetalleOrdenCActivity">
-    
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp">
-        
+
         <ImageButton
             android:id="@+id/Ib_regresar"
             android:src="@drawable/ico_regresar"
@@ -20,8 +20,8 @@
             android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        
-        
+
+
         <TextView
             android:text="@string/txtDetalleProducto"
             android:textSize="15sp"
@@ -29,15 +29,15 @@
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        
-        
+
+
         <View
             android:background="#ccc"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
-        
-        
+
+
     </RelativeLayout>
 
     <com.google.android.material.card.MaterialCardView
@@ -150,9 +150,8 @@
 
             </TableRow>
 
-            <!--Dirección-->
+            <!--Dirección: Etiqueta-->
             <TableRow>
-
                 <TextView
                     android:text="@string/tvdireccionOrdenD"
                     android:layout_width="wrap_content"
@@ -162,17 +161,26 @@
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/direccionOrdenD"
-                    android:text="@string/direccionOrdenD"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_height="wrap_content"/>
+            </TableRow>
 
+            <!--Dirección: Valor (en fila separada para ocupar todo el ancho)-->
+            <TableRow>
+                <TextView
+                    android:id="@+id/direccionOrdenD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_span="2"
+                    android:layout_column="0"
+                    android:ellipsize="none"
+                    android:maxLines="3"
+                    android:scrollHorizontally="false"
+                    android:text="@string/direccionOrdenD" />
             </TableRow>
 
         </TableLayout>
-
-
 
     </com.google.android.material.card.MaterialCardView>
 

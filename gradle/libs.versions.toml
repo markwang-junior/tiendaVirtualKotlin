@@ -22,6 +22,8 @@ photoViewV="2.3.0"
 circleImageV = "3.1.0"
 mapsV="18.2.0"
 placeV="3.5.0"
+paypalCheckoutSdkV = "0.8.0"
+cardIoV = "5.5.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,6 +46,8 @@ photoView={group="com.github.chrisbanes", name="PhotoView" , version.ref="photoV
 circleImage={group="de.hdodenhof" , name="circleimageview", version.ref="circleImageV"}
 maps={group="com.google.android.gms", name="play-services-maps", version.ref="mapsV"}
 places={group="com.google.android.libraries.places", name="places", version.ref="placeV"}
+paypalCheckoutSdk = { group = "com.paypal.checkout", name = "android-sdk", version.ref = "paypalCheckoutSdkV" }
+cardIo = { group = "io.card", name = "android-sdk", version.ref = "cardIoV" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

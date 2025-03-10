@@ -17,7 +17,7 @@ import com.markwang.tiendavirtualapp_kotlin.Adaptadores.AdapdadorCarritoC
 import com.markwang.tiendavirtualapp_kotlin.Cliente.Orden.DetalleOrdenCActivity
 import com.markwang.tiendavirtualapp_kotlin.Constantes
 import com.markwang.tiendavirtualapp_kotlin.Modelos.ModeloProductoCarrito
-import com.markwang.tiendavirtualapp_kotlin.R
+import com.markwang.tiendavirtualapp_kotlin.Cliente.Pago.PaymentActivity
 import com.markwang.tiendavirtualapp_kotlin.databinding.FragmentCarritoCBinding
 
 class FragmentCarritoC : Fragment() {
@@ -38,10 +38,14 @@ class FragmentCarritoC : Fragment() {
         binding = FragmentCarritoCBinding.inflate(inflater, container, false)
 
         binding.btnCrearOrden.setOnClickListener {
-            if (productosArrayList.size == 0){
+            if (productosArrayList.size == 0) {
                 Toast.makeText(mContext, "No hay productos en el carrito", Toast.LENGTH_SHORT).show()
-            }else{
-                crearOrden()
+            } else {
+                // En lugar de llamar a crearOrden(), iniciamos la actividad de pago
+                val precioTotal = binding.sumaProductos.text.toString().trim()
+                val intent = Intent(mContext, PaymentActivity::class.java)
+                intent.putExtra("precioTotal", precioTotal)
+                startActivity(intent)
             }
         }
 

@@ -38,6 +38,9 @@ android {
     buildFeatures{
         viewBinding= true
     }
+    configurations.all {
+        exclude(group = "org.jfrog.cardinalcommerce.gradle", module = "cardinalmobilesdk")
+    }
 }
 
 dependencies {
@@ -62,4 +65,7 @@ dependencies {
     implementation(libs.circleImage)
     implementation(libs.maps)
     implementation(libs.places)
+    implementation(libs.paypalCheckoutSdk)
+    implementation(libs.cardIo)
+
 }

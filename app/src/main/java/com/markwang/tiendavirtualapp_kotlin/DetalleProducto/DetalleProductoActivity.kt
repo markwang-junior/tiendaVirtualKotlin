@@ -1,9 +1,16 @@
 package com.markwang.tiendavirtualapp_kotlin.DetalleProducto
 
+import android.app.Dialog
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -20,6 +27,7 @@ class DetalleProductoActivity : AppCompatActivity() {
     private lateinit var binding : ActivityDetalleProductoBinding
     private lateinit var firebaseAuth : FirebaseAuth
     private var idProducto = ""
+    private var modeloProducto: ModeloProducto? = null
 
     private lateinit var imagenSlider : ArrayList<ModeloImgSlider>
 
@@ -33,12 +41,20 @@ class DetalleProductoActivity : AppCompatActivity() {
         //obtenemos el id del producto enviado desde el adapdador
         idProducto = intent.getStringExtra("idProducto").toString()
 
-
         cargarImagenesProd()
         cargarInfoProducto()
 
         binding.IbRegresar.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+        }
+
+        // Añadir evento al botón de agregar al carrito
+        binding.itemAgregarCarritoP.setOnClickListener {
+            if (modeloProducto != null) {
+                verCarrito(modeloProducto!!)
+            } else {
+                Toast.makeText(this, "Espere un momento, cargando producto", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -47,7 +63,7 @@ class DetalleProductoActivity : AppCompatActivity() {
         ref.child(idProducto)
             .addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val modeloProducto = snapshot.getValue(ModeloProducto::class.java)
+                    modeloProducto = snapshot.getValue(ModeloProducto::class.java)
 
                     val nombre = modeloProducto?.nombre
                     val descripcion = modeloProducto?.descripcion
@@ -72,7 +88,7 @@ class DetalleProductoActivity : AppCompatActivity() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                    Toast.makeText(this@DetalleProductoActivity, "Error al cargar datos", Toast.LENGTH_SHORT).show()
                 }
             })
     }
@@ -99,7 +115,146 @@ class DetalleProductoActivity : AppCompatActivity() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                    Toast.makeText(this@DetalleProductoActivity, "Error al cargar imágenes", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    private var costo : Double = 0.0
+    private var costoFinal : Double = 0.0
+    private var cantidadProd : Int = 0
+
+    // Función para mostrar el diálogo del carrito
+    private fun verCarrito(modeloProducto: ModeloProducto) {
+        var imagenSIV : ShapeableImageView
+        var nombreTv : TextView
+        var descripcionTv : TextView
+        var notaDescTv : TextView
+        var precioOriginalTv : TextView
+        var precioDescuentoTv : TextView
+        var precioFinalTv : TextView
+        var btnDisminuir : ImageButton
+        var cantidadTv : TextView
+        var btnAumentar : ImageButton
+        var btnAgregarCarrito : MaterialButton
+
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.carrito_compras)
+
+        imagenSIV = dialog.findViewById(R.id.imagenPCar)
+        nombreTv = dialog.findViewById(R.id.nombrePCar)
+        descripcionTv = dialog.findViewById(R.id.descripcionPCar)
+        notaDescTv = dialog.findViewById(R.id.notaDescPCar)
+        precioOriginalTv = dialog.findViewById(R.id.precioOriginalPCar)
+        precioDescuentoTv = dialog.findViewById(R.id.precioDescPCar)
+        precioFinalTv = dialog.findViewById(R.id.precioFinalPCar)
+        btnDisminuir = dialog.findViewById(R.id.btnDisminuir)
+        cantidadTv = dialog.findViewById(R.id.cantidadPCar)
+        btnAumentar = dialog.findViewById(R.id.btnAumentar)
+        btnAgregarCarrito = dialog.findViewById(R.id.btnAgregarCarrito)
+
+        val productoId = modeloProducto.id
+        val nombre = modeloProducto.nombre
+        val descripcion = modeloProducto.descripcion
+        val precio = modeloProducto.precio
+        val precioDesc = modeloProducto.precioDesc
+        val notaDesc = modeloProducto.notaDesc
+
+        if (!precioDesc.equals("0") && !notaDesc.equals("")){
+            /*El producto si tiene descuento*/
+            notaDescTv.visibility = View.VISIBLE
+            precioDescuentoTv.visibility = View.VISIBLE
+
+            notaDescTv.setText(notaDesc)
+            precioDescuentoTv.setText(precioDesc.plus(" €"))
+            precioOriginalTv.setText(precio.plus(" €"))
+            precioOriginalTv.paintFlags = precioOriginalTv.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            costo = precioDesc.toDouble()
+        }else{
+            precioOriginalTv.setText(precio.plus(" €"))
+            precioOriginalTv.paintFlags = precioOriginalTv.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            costo = precio.toDouble()
+        }
+
+        nombreTv.setText(nombre)
+        descripcionTv.setText(descripcion)
+
+        costoFinal = costo
+        cantidadProd = 1
+
+        btnAumentar.setOnClickListener {
+            costoFinal = costoFinal +costo
+            cantidadProd++
+
+            precioFinalTv.text = costoFinal.toString()
+            cantidadTv.text = cantidadProd.toString()
+        }
+
+        btnDisminuir.setOnClickListener {
+            if (cantidadProd > 1){
+                costoFinal = costoFinal-costo
+                cantidadProd--
+
+                precioFinalTv.text = costoFinal.toString()
+                cantidadTv.text = cantidadProd.toString()
+            }
+        }
+
+        precioFinalTv.text = costo.toString()
+
+        // Cargar primera imagen
+        cargarImg(productoId, imagenSIV)
+
+        btnAgregarCarrito.setOnClickListener {
+            agregarCarrito(modeloProducto, costoFinal, cantidadProd)
+            dialog.dismiss()
+        }
+
+        dialog.show()
+        dialog.setCanceledOnTouchOutside(true)
+    }
+
+    private fun agregarCarrito(modeloProducto: ModeloProducto, costoFinal: Double, cantidadProd: Int) {
+        val hashMap = HashMap<String, Any>()
+
+        hashMap["idProducto"] = modeloProducto.id
+        hashMap["nombre"] = modeloProducto.nombre
+        hashMap["precio"] = modeloProducto.precio
+        hashMap["precioDesc"] = modeloProducto.precioDesc
+        hashMap["precioFinal"] = costoFinal.toString()
+        hashMap["cantidad"] = cantidadProd
+
+        val ref = FirebaseDatabase.getInstance().getReference("Usuarios")
+        ref.child(firebaseAuth.uid!!).child("CarritoCompras").child(modeloProducto.id)
+            .setValue(hashMap)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Se agregó al carrito el producto", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e->
+                Toast.makeText(this, "${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun cargarImg(productoId: String, imagenSIV: ShapeableImageView) {
+        val ref = FirebaseDatabase.getInstance().getReference("Productos")
+        ref.child(productoId).child("Imagenes")
+            .limitToFirst(1)
+            .addValueEventListener(object :ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (ds in snapshot.children){
+                        val imagenUrl = "${ds.child("imagenUrl").value}"
+
+                        try {
+                            Glide.with(this@DetalleProductoActivity)
+                                .load(imagenUrl)
+                                .placeholder(R.drawable.item_img_producto)
+                                .into(imagenSIV)
+                        }catch (e:Exception){
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
                 }
             })
     }

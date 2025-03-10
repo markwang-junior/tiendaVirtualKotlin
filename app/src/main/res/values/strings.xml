@@ -173,7 +173,7 @@
     <string name="fechaOrdenItem">00/00/0000</string>
     <string name="estadoOrdenItem">Estado</string>
     <string name="costoOrdenItem">00</string>
-    
+
     <!--Detalle de la orden-->
     <string name="tvidOrdenD">Número de pedido: </string>
     <string name="idOrdenD"> -- </string>
@@ -188,9 +188,17 @@
     <string name="tvdireccionOrdenD">Dirección: </string>
     <string name="direccionOrdenD"> -- </string>
     <string name="txtProductosOrdenados">Productos ordenados</string>
-    
+
     <string name="itemNombreP">Nombre del producto</string>
     <string name="itemPrecioP">Precio</string>
+
+    <!--Paypal para pagar los clientes-->
+    <string name="pago_title">Método de Pago</string>
+    <string name="payment_info">Selecciona un método de pago para completar tu compra</string>
+    <string name="payment_method">Métodos de pago disponibles</string>
+    <string name="payment_method_description">Elige PayPal para procesar tu pago de forma segura</string>
+    <string name="pay_with_paypal">Pagar con PayPal</string>
+    <string name="payment_note">Nota: Esta es una versión de prueba. No se realizará ningún cargo real.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
