@@ -33,15 +33,21 @@ class AdapdadorProductoOrden : RecyclerView.Adapter<AdapdadorProductoOrden.Holde
 
         val nombre = modeloProductoOrden.nombre
         val precio = modeloProductoOrden.precio
+        val cantidad = modeloProductoOrden.cantidad
+        val precioFinal = modeloProductoOrden.precioFinal
 
         holder.itemNombreP.text = nombre
-        holder.itemPrecioP.text = precio
+        holder.itemPrecioP.text = "Precio unidad: ${precio.plus(" €")}"
+        holder.itemCantidadP.text = "Cantidad: ${cantidad}"
+        holder.itemPrecioFinalP.text = "Precio suma total: ${precioFinal.plus(" €")}"
     }
 
 
     inner class HolderProductoOrden (itemView : View) : RecyclerView.ViewHolder(itemView){
         var itemNombreP = binding.itemNombreP
         var itemPrecioP = binding.itemPrecioP
+        var itemCantidadP = binding.itemCantidadP
+        var itemPrecioFinalP = binding.itemPrecioFinaP
     }
 
 

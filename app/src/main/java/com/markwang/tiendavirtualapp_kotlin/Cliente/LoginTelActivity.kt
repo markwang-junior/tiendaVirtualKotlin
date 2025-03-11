@@ -114,23 +114,25 @@ class LoginTelActivity : AppCompatActivity() {
         datosCliente["tRegistro"] = tiempoReg
         datosCliente["imagen"] = ""
         datosCliente["tipoUsuario"] = "Cliente"
+        datosCliente["perfilCompleto"] = false // Indicar que el perfil está incompleto
 
         val reference = FirebaseDatabase.getInstance().getReference("Usuarios")
         reference.child(uid!!)
             .setValue(datosCliente)
             .addOnSuccessListener {
                 progressDialog.dismiss()
-                startActivity(Intent(this, MainActivityCliente::class.java))
+                // Dirigir a MainActivityCliente con bandera para abrir perfil
+                val intent = Intent(this, MainActivityCliente::class.java)
+                intent.putExtra("ABRIR_PERFIL", true)
+                startActivity(intent)
                 finishAffinity()
-
+                Toast.makeText(this, "Bienvenido. Por favor completa tu perfil", Toast.LENGTH_LONG).show()
             }
             .addOnFailureListener {e->
                 progressDialog.dismiss()
                 Toast.makeText(this@LoginTelActivity,
                     "${e.message}", Toast.LENGTH_SHORT).show()
-
             }
-
     }
 
     private fun reenviarCodVer() {

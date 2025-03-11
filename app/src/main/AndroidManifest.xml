@@ -27,7 +27,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TiendaVirtualAppKotlin"
         tools:targetApi="31">
-
+        <activity
+            android:name=".Vendedor.Orden.DetalleOrdenVActivity"
+            android:exported="false" />
         <activity
             android:name=".Cliente.Pago.PaymentActivity"
             android:exported="false" />
@@ -85,8 +87,8 @@
         <activity
             android:name=".Cliente.MainActivityCliente"
             android:exported="true" />
-
-        <!-- PayPal Checkout SDK Intent Filter
+        <!--
+ PayPal Checkout SDK Intent Filter
         <activity
             android:name="com.paypal.checkout.paymentbutton.PayPalActivity"
             android:exported="true">
@@ -96,8 +98,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="${applicationId}" />
             </intent-filter>
-        </activity>-->
-
+        </activity>
+        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/mi_google_maps_api_key" />

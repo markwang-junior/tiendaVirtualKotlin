@@ -11,9 +11,10 @@ import com.markwang.tiendavirtualapp_kotlin.Cliente.Orden.DetalleOrdenCActivity
 import com.markwang.tiendavirtualapp_kotlin.Constantes
 import com.markwang.tiendavirtualapp_kotlin.Modelos.ModeloOrdenCompra
 import com.markwang.tiendavirtualapp_kotlin.R
+import com.markwang.tiendavirtualapp_kotlin.Vendedor.Orden.DetalleOrdenVActivity
 import com.markwang.tiendavirtualapp_kotlin.databinding.ItemOrdenCompraBinding
 
-class AdapdadorOrdenCompra : RecyclerView.Adapter<AdapdadorOrdenCompra.HolderOrdenCompra> {
+class AdapdadorOrdenCompraV : RecyclerView.Adapter<AdapdadorOrdenCompraV.HolderOrdenCompra> {
 
     private lateinit var binding : ItemOrdenCompraBinding
 
@@ -49,7 +50,7 @@ class AdapdadorOrdenCompra : RecyclerView.Adapter<AdapdadorOrdenCompra.HolderOrd
         if (estadoOrden.equals("Solicitud recibida")){
             holder.estadoOrdenItem.setTextColor(ContextCompat.getColor(mContext, R.color.azul_marino_oscuro))
         }else if(estadoOrden.equals("En preparación")){
-            holder.estadoOrdenItem.setTextColor(ContextCompat.getColor(mContext,R.color.naranja))
+            holder.estadoOrdenItem.setTextColor(ContextCompat.getColor(mContext, R.color.naranja))
         }else if (estadoOrden.equals("Entregado")){
             holder.estadoOrdenItem.setTextColor(ContextCompat.getColor(mContext, R.color.verde_oscuro2))
         }else if (estadoOrden.equals("Cancelado")){
@@ -61,7 +62,7 @@ class AdapdadorOrdenCompra : RecyclerView.Adapter<AdapdadorOrdenCompra.HolderOrd
         binding.fechaOrdenItem.text = fecha
 
         holder.ibSiguiente.setOnClickListener {
-            val intent = Intent(mContext, DetalleOrdenCActivity::class.java)
+            val intent = Intent(mContext, DetalleOrdenVActivity::class.java)
             intent.putExtra("idOrden", idOrden)
             mContext.startActivity(intent)
         }

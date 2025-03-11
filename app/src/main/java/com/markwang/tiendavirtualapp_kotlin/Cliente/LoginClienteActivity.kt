@@ -20,11 +20,11 @@ import com.markwang.tiendavirtualapp_kotlin.databinding.ActivityLoginClienteBind
 
 class LoginClienteActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityLoginClienteBinding
+    private lateinit var binding: ActivityLoginClienteBinding
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var progressDialog: ProgressDialog
-    private lateinit var mGoogleSignInClient : GoogleSignInClient
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,17 +74,16 @@ class LoginClienteActivity : AppCompatActivity() {
         email = binding.etEmail.text.toString().trim()
         password = binding.etPassword.text.toString().trim()
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.etEmail.error = "Email inválido"
             binding.etEmail.requestFocus()
-        }
-        else if (email.isEmpty()){
+        } else if (email.isEmpty()) {
             binding.etEmail.error = "Ingrese email"
             binding.etEmail.requestFocus()
-        }else if (password.isEmpty()){
+        } else if (password.isEmpty()) {
             binding.etPassword.error = "Ingrese password"
             binding.etPassword.requestFocus()
-        }else{
+        } else {
             loginCliente()
         }
 
@@ -97,13 +96,17 @@ class LoginClienteActivity : AppCompatActivity() {
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 progressDialog.dismiss()
-                startActivity(Intent(this,MainActivityCliente::class.java))
+                startActivity(Intent(this, MainActivityCliente::class.java))
                 finishAffinity()
                 Toast.makeText(this, "Bienvenido", Toast.LENGTH_SHORT).show()
 
             }
-            .addOnFailureListener {e->
-                Toast.makeText(this, "No se pudo iniciar sesión debido a ${e.message}", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener { e ->
+                Toast.makeText(
+                    this,
+                    "No se pudo iniciar sesión debido a ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
@@ -115,19 +118,21 @@ class LoginClienteActivity : AppCompatActivity() {
 
     private val googleSignInARL = registerForActivityResult(
 
-        ActivityResultContracts.StartActivityForResult()){ resultado->
-        if (resultado.resultCode == RESULT_OK){
+        ActivityResultContracts.StartActivityForResult()
+    ) { resultado ->
+        if (resultado.resultCode == RESULT_OK) {
             //si el usuario seleccionó una cuenta del cuadro de díalogo
             val data = resultado.data
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val cuenta = task.getResult(ApiException::class.java)
                 autenticacionGoogle(cuenta.idToken)
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 Toast.makeText(this, "${e.message}", Toast.LENGTH_SHORT).show()
             }
-        }else{
-            Toast.makeText(this, "La operación de logeo ha sido cancelada", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "La operación de logeo ha sido cancelada", Toast.LENGTH_SHORT)
+                .show()
         }
 
 
@@ -136,17 +141,17 @@ class LoginClienteActivity : AppCompatActivity() {
     private fun autenticacionGoogle(idToken: String?) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential)
-            .addOnSuccessListener { resultadoAuth->
-                if (resultadoAuth.additionalUserInfo!!.isNewUser){
+            .addOnSuccessListener { resultadoAuth ->
+                if (resultadoAuth.additionalUserInfo!!.isNewUser) {
                     //si el usuario es nuevo, registrar su informacion
                     llenarInfoBD()
-                }else{
+                } else {
                     //si el usuario ya se registró con anterioridad
                     startActivity(Intent(this, MainActivityCliente::class.java))
                     finishAffinity()
                 }
             }
-            .addOnFailureListener { e->
+            .addOnFailureListener { e ->
                 Toast.makeText(this, "${e.message}", Toast.LENGTH_SHORT).show()
 
             }
@@ -171,22 +176,25 @@ class LoginClienteActivity : AppCompatActivity() {
         datosCliente["proveedor"] = "google"
         datosCliente["tRegistro"] = "$tiempoRegistro"
         datosCliente["imagen"] = ""
-        datosCliente["tipoUsuario"] ="Cliente"
+        datosCliente["tipoUsuario"] = "Cliente"
+        datosCliente["perfilCompleto"] = false // Indicar que el perfil está incompleto
 
         val ref = FirebaseDatabase.getInstance().getReference("Usuarios")
         ref.child(uid!!)
             .setValue(datosCliente)
             .addOnSuccessListener {
                 progressDialog.dismiss()
-                startActivity(Intent(this, MainActivityCliente::class.java))
+                // Dirigir a MainActivityCliente con bandera para abrir perfil
+                val intent = Intent(this, MainActivityCliente::class.java)
+                intent.putExtra("ABRIR_PERFIL", true)
+                startActivity(intent)
                 finishAffinity()
+                Toast.makeText(this, "Bienvenido. Por favor completa tu perfil", Toast.LENGTH_LONG)
+                    .show()
             }
-            .addOnFailureListener {e->
+            .addOnFailureListener { e ->
                 progressDialog.dismiss()
                 Toast.makeText(this, "${e.message}", Toast.LENGTH_SHORT).show()
-
             }
-
-
     }
 }

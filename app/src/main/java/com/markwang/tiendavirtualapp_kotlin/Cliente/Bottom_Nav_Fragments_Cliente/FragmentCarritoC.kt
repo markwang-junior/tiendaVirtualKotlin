@@ -18,6 +18,7 @@ import com.markwang.tiendavirtualapp_kotlin.Cliente.Orden.DetalleOrdenCActivity
 import com.markwang.tiendavirtualapp_kotlin.Constantes
 import com.markwang.tiendavirtualapp_kotlin.Modelos.ModeloProductoCarrito
 import com.markwang.tiendavirtualapp_kotlin.Cliente.Pago.PaymentActivity
+import com.markwang.tiendavirtualapp_kotlin.R
 import com.markwang.tiendavirtualapp_kotlin.databinding.FragmentCarritoCBinding
 
 class FragmentCarritoC : Fragment() {
@@ -47,6 +48,12 @@ class FragmentCarritoC : Fragment() {
                 intent.putExtra("precioTotal", precioTotal)
                 startActivity(intent)
             }
+        }
+
+        // Botón para explorar tienda (cuando carrito está vacío)
+        binding.btnExplorarTienda.setOnClickListener {
+            // Navegar al fragmento de tienda
+            requireActivity().findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottomNavigation)?.selectedItemId = R.id.op_tienda_c
         }
 
         return binding.root
@@ -95,7 +102,6 @@ class FragmentCarritoC : Fragment() {
             }
             .addOnFailureListener {e->
                 Toast.makeText(mContext, "${e.message}",Toast.LENGTH_SHORT).show()
-
             }
     }
 
@@ -113,7 +119,6 @@ class FragmentCarritoC : Fragment() {
 
         ref.removeValue().addOnSuccessListener {
             Toast.makeText(mContext, "Los productos se han eliminado del carrito", Toast.LENGTH_SHORT).show()
-
         }
             .addOnFailureListener {e->
                 Toast.makeText(mContext, "${e.message}", Toast.LENGTH_SHORT).show()
@@ -127,25 +132,21 @@ class FragmentCarritoC : Fragment() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     var suma = 0.0
                     for (producto in snapshot.children){
-
                         val precioFinal = producto.child("precioFinal").getValue(String::class.java)
-
                         if (precioFinal!=null){
                             suma += precioFinal.toDouble()
                         }
-
                         binding.sumaProductos.setText(suma.toString().plus(" €"))
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                    Toast.makeText(mContext, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
                 }
             })
     }
 
     private fun cargarProdCarrito() {
-
         productosArrayList = ArrayList()
 
         val ref = FirebaseDatabase.getInstance().getReference("Usuarios")
@@ -160,12 +161,22 @@ class FragmentCarritoC : Fragment() {
 
                     productoAdapdadorCarritoC = AdapdadorCarritoC(mContext, productosArrayList)
                     binding.carritoRv.adapter = productoAdapdadorCarritoC
+
+                    // Mostrar/ocultar vistas según si el carrito está vacío
+                    if (productosArrayList.isEmpty()) {
+                        binding.carritoContenidoLayout.visibility = View.GONE
+                        binding.btnCrearOrden.visibility = View.GONE
+                        binding.carritoVacioLayout.visibility = View.VISIBLE
+                    } else {
+                        binding.carritoContenidoLayout.visibility = View.VISIBLE
+                        binding.btnCrearOrden.visibility = View.VISIBLE
+                        binding.carritoVacioLayout.visibility = View.GONE
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                    Toast.makeText(mContext, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
                 }
             })
     }
-
 }

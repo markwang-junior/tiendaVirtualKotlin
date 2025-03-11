@@ -26,6 +26,7 @@ import com.markwang.tiendavirtualapp_kotlin.Constantes
 import com.markwang.tiendavirtualapp_kotlin.Mapas.SeleccionarUbicacionActivity
 import com.markwang.tiendavirtualapp_kotlin.R
 import com.markwang.tiendavirtualapp_kotlin.databinding.FragmentMiPerfilCBinding
+import android.util.Log
 
 class FragmentMiPerfilC : Fragment() {
 
@@ -115,7 +116,7 @@ class FragmentMiPerfilC : Fragment() {
         ref.child("${firebaseAuth.uid}")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    //Obtener los datos del usuario
+                    // Obtener los datos del usuario
                     val nombres = "${snapshot.child("nombres").value}"
                     val email = "${snapshot.child("email").value}"
                     val dni = "${snapshot.child("dni").value}"
@@ -125,10 +126,7 @@ class FragmentMiPerfilC : Fragment() {
                     val fechaRegistro = "${snapshot.child("tRegistro").value}"
                     val direccion = "${snapshot.child("direccion").value}"
 
-                    val fechaRegistroLong = fechaRegistro.toLongOrNull() ?: 0L
-                    val fecha = Constantes().obtenerFecha(fechaRegistroLong)
-
-
+                    // Configurar los campos
                     binding.nombresCperfil.setText(nombres)
                     binding.emailCPerfil.setText(email)
                     binding.dniCPerfil.setText(dni)
@@ -141,32 +139,41 @@ class FragmentMiPerfilC : Fragment() {
                             .placeholder(R.drawable.img_perfil)
                             .into(binding.imgPerfil)
                     } catch (e: Exception) {
-
+                        // Manejo de errores
                     }
 
-                    if (proveedor == "email") {
-                        binding.proveedorCPerfil.text = "La cuenta fue creada a través de su email"
-                        binding.emailCPerfil.isEnabled = false
-                        binding.btnActualizarContraseA.visibility = View.VISIBLE
-                    } else if (proveedor == "google") {
-                        binding.proveedorCPerfil.text = "La cuenta fue creada a través de una cuenta de Google"
-                        binding.emailCPerfil.isEnabled = false
-                    } else if (proveedor == "telefono") {
-                        binding.proveedorCPerfil.text = "La cuenta fue creada a través de su número teléfono"
-                        binding.telefonoCPerfil.isEnabled = false
+                    // Usar proveedores de autenticación directamente desde Firebase
+                    val user = firebaseAuth.currentUser
+                    val proveedores = user?.providerData?.map { it.providerId } ?: listOf()
 
+                    Log.d("PerfilDebug", "Proveedores: $proveedores, Campo proveedor: $proveedor")
 
+                    when {
+                        proveedores.contains("google.com") -> {
+                            binding.proveedorCPerfil.text = "La cuenta fue creada a través de una cuenta de Google"
+                            binding.emailCPerfil.isEnabled = false
+                            binding.btnActualizarContraseA.visibility = View.GONE
+                        }
+                        proveedores.contains("phone") -> {
+                            binding.proveedorCPerfil.text = "La cuenta fue creada a través de su número de teléfono"
+                            binding.telefonoCPerfil.isEnabled = false
+                            binding.btnActualizarContraseA.visibility = View.GONE
+                        }
+                        proveedores.contains("password") -> {
+                            binding.proveedorCPerfil.text = "La cuenta fue creada a través de su email"
+                            binding.emailCPerfil.isEnabled = false
+                            binding.btnActualizarContraseA.visibility = View.VISIBLE
+                        }
+                        else -> {
+                            binding.proveedorCPerfil.text = "Método de registro: $proveedor"
+                        }
                     }
-
-
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                    Toast.makeText(mContext, "Error al cargar datos: ${error.message}", Toast.LENGTH_SHORT).show()
                 }
             })
-
-
     }
 
     private fun seleccionarImg() {

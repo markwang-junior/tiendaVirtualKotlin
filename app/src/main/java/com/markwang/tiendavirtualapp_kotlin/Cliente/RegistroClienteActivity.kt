@@ -32,7 +32,6 @@ class RegistroClienteActivity : AppCompatActivity() {
         binding.btnRegistrarC.setOnClickListener {
             validarInformacion()
         }
-
     }
 
     private var nombres =""
@@ -80,41 +79,47 @@ class RegistroClienteActivity : AppCompatActivity() {
                 insertarInfo()
             }
             .addOnFailureListener { e->
+                progressDialog.dismiss()
                 Toast.makeText(this, "Falló el registro debido a ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
-        private fun insertarInfo(){
-            progressDialog.setMessage("Guardando información")
+    private fun insertarInfo(){
+        progressDialog.setMessage("Guardando información")
 
-            val uid = firebaseAuth.uid
-            val nombresC = nombres
-            val emailC = email
-            val tiempoRegistro = Constantes().obtenerTiempoD()
+        val uid = firebaseAuth.uid
+        val nombresC = nombres
+        val emailC = email
+        val tiempoRegistro = Constantes().obtenerTiempoD()
 
-            val datosCliente = HashMap<String, Any>()
+        val datosCliente = HashMap<String, Any>()
 
-            datosCliente["uid"] = "$uid"
-            datosCliente["nombres"] = "$nombresC"
-            datosCliente["email"] = "$emailC"
-            datosCliente["telefono"] = ""
-            datosCliente["dni"] = ""
-            datosCliente["proveedor"] = "email"
-            datosCliente["Registro"] = "$tiempoRegistro"
-            datosCliente["imagen"] = ""
-            datosCliente["tipoUsuario"] = "Cliente"
+        datosCliente["uid"] = "$uid"
+        datosCliente["nombres"] = "$nombresC"
+        datosCliente["email"] = "$emailC"
+        datosCliente["telefono"] = ""
+        datosCliente["dni"] = ""
+        datosCliente["proveedor"] = "email"
+        datosCliente["tRegistro"] = "$tiempoRegistro"
+        datosCliente["imagen"] = ""
+        datosCliente["tipoUsuario"] = "Cliente"
+        datosCliente["perfilCompleto"] = false // Indicar que el perfil está incompleto
 
-            val reference = FirebaseDatabase.getInstance().getReference("Usuarios")
-            reference.child(uid!!)
-                .setValue(datosCliente)
-                .addOnSuccessListener {
-                    progressDialog.dismiss()
-                    startActivity(Intent(this@RegistroClienteActivity, MainActivityCliente::class.java))
-                    finishAffinity()
-                }
-                .addOnFailureListener {e->
-                    progressDialog.dismiss()
-                    Toast.makeText(this, "Falló el registro debido a ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-        }
+        val reference = FirebaseDatabase.getInstance().getReference("Usuarios")
+        reference.child(uid!!)
+            .setValue(datosCliente)
+            .addOnSuccessListener {
+                progressDialog.dismiss()
+                // Dirigir a MainActivityCliente con bandera para abrir perfil
+                val intent = Intent(this@RegistroClienteActivity, MainActivityCliente::class.java)
+                intent.putExtra("ABRIR_PERFIL", true)
+                startActivity(intent)
+                finishAffinity()
+                Toast.makeText(this, "Registro exitoso. Por favor completa tu perfil", Toast.LENGTH_LONG).show()
+            }
+            .addOnFailureListener {e->
+                progressDialog.dismiss()
+                Toast.makeText(this, "Falló el registro debido a ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
 }

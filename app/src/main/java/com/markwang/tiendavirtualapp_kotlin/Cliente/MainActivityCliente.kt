@@ -37,7 +37,6 @@ class MainActivityCliente : AppCompatActivity(), NavigationView.OnNavigationItem
         firebaseAuth = FirebaseAuth.getInstance()
         comprobarSesion()
 
-
         binding.navigationView.setNavigationItemSelectedListener(this)
 
         val toggle = ActionBarDrawerToggle(
@@ -51,7 +50,20 @@ class MainActivityCliente : AppCompatActivity(), NavigationView.OnNavigationItem
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        replaceFragment(FragmentInicioC()) // ✅ Se inicializa con el fragmento de inicio
+        // Verificar si viene con la bandera ABRIR_PERFIL
+        if (intent.getBooleanExtra("ABRIR_PERFIL", false)) {
+            // Mostrar el fragmento de perfil
+            replaceFragment(FragmentMiPerfilC())
+            binding.navigationView.setCheckedItem(R.id.op_mi_perfil_c)
+
+            // Mostrar mensaje informativo
+            Toast.makeText(this,
+                "Por favor completa tu información de perfil para una mejor experiencia",
+                Toast.LENGTH_LONG).show()
+        } else {
+            // Comportamiento normal - inicializar con fragmento de inicio
+            replaceFragment(FragmentInicioC()) // ✅ Se inicializa con el fragmento de inicio
+        }
     }
 
     private fun comprobarSesion(){

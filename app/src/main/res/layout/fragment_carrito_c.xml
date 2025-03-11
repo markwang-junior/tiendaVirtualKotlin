@@ -7,7 +7,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Cliente.Bottom_Nav_Fragments_Cliente.FragmentCarritoC">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <!-- Vista original del carrito -->
+    <LinearLayout
+        android:id="@+id/carritoContenidoLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -20,17 +22,60 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/carritoRv"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_carrito_c"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+    </LinearLayout>
 
+    <!-- Layout para carrito vacío -->
+    <RelativeLayout
+        android:id="@+id/carritoVacioLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:padding="16dp">
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/ico_carrito_vacio"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/carrito_vacio"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/carrito_vacio_mensaje"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnExplorarTienda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ir_a_tienda"
+                app:cornerRadius="8dp"/>
+        </LinearLayout>
+    </RelativeLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCrearOrden"
@@ -43,6 +88,5 @@
         android:backgroundTint="@color/azul_marino_oscuro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
 
 </RelativeLayout>
