@@ -23,7 +23,7 @@
 
     <!--Bottom Navigation Bar Vendedor-->
     <string name="op_mis_productos_v">Mis productos</string>
-    <string name="op_mis_ordenes_v">Órdenes</string>
+    <string name="op_mis_ordenes_v">Pedidos</string>
 
     <!--Bottom Navigation Bar Cliente-->
     <string name="op_tienda_c">Tienda</string>
@@ -193,6 +193,23 @@
     <string name="itemPrecioP">Precio</string>
     <string name="itemCantidadP">Cantidad</string>
     <string name="itemPrecioFinaP">Precio total</string>
+    
+    <string name="etBuscarOrdenId">Buscar un pedido</string>
+
+    <!--Detalle del cliente-->
+    <string name="tvInfoCliente">Información de cliente</string>
+    <string name="txtNombresC">Nombres:</string>
+    <string name="tvNombresC"> </string>
+    <string name="txtDniC">Dni: </string>
+    <string name="tvDniC"> </string>
+    <string name="txtTelC">Teléfono</string>
+    <string name="tvTelC"> </string>
+    <string name="txtDireccionC">Dirección</string>
+    <string name="tvDireccionC"> </string>
+    <string name="btnLlamar">Llamar</string>
+    <string name="btnSms">Sms</string>
+
+    <string name="verInfoCliente">Información del cliente</string>
 
     <!--Paypal para pagar los clientes-->
     <string name="pago_title">Método de Pago</string>

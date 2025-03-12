@@ -195,6 +195,15 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/verInfoCliente"
+        android:text="@string/verInfoCliente"
+        app:cornerRadius="8dp"
+        android:textAllCaps="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <TextView
         android:text="@string/txtProductosOrdenados"
         android:padding="5dp"
