@@ -13,6 +13,7 @@
     <string name="op_inicio_v">Inicio</string>
     <string name="op_mi_tienda_v">Mi tienda</string>
     <string name="op_categotias_v">Categorias</string>
+    <string name="op_productos_v">Productos</string>
     <string name="op_resenia_v">Reseñas</string>
     <string name="op_cerrar_sesion_v">Cerrar sesión</string>
 
@@ -101,6 +102,7 @@
 
     <!--Item producto -v-->
     <string name="item_nombre_p">Nombre de producto</string>
+    <string name="item_categoria_p">Categoría</string>
     <string name="item_nota_p">50% OFF</string>
     <string name="item_precio_p">00</string>
     <string name="item_precio_p_desc">00</string>
@@ -193,7 +195,7 @@
     <string name="itemPrecioP">Precio</string>
     <string name="itemCantidadP">Cantidad</string>
     <string name="itemPrecioFinaP">Precio total</string>
-    
+
     <string name="etBuscarOrdenId">Buscar un pedido</string>
 
     <!--Detalle del cliente-->
@@ -224,6 +226,10 @@
     <string name="carrito_vacio">Tu carrito está vacío</string>
     <string name="carrito_vacio_mensaje">Explora nuestra tienda para añadir productos</string>
     <string name="ir_a_tienda">Ir a la tienda</string>
+
+    <string name="txtActNomCat">Actualizar nombre cat.</string>
+    <string name="etNuevoNomCat">Nombre de cat.</string>
+    <string name="btnActualizarNomCat">Actualizar</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

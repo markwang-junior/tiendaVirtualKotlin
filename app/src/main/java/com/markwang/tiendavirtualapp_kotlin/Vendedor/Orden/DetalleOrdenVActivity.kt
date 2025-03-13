@@ -1,6 +1,10 @@
 package com.markwang.tiendavirtualapp_kotlin.Vendedor.Orden
 
+import android.Manifest
 import android.app.Dialog
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -8,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
@@ -23,6 +28,7 @@ import com.markwang.tiendavirtualapp_kotlin.Constantes
 import com.markwang.tiendavirtualapp_kotlin.Modelos.ModeloProductoOrden
 import com.markwang.tiendavirtualapp_kotlin.R
 import com.markwang.tiendavirtualapp_kotlin.databinding.ActivityDetalleOrdenVactivityBinding
+
 
 class DetalleOrdenVActivity : AppCompatActivity() {
 
@@ -64,12 +70,14 @@ class DetalleOrdenVActivity : AppCompatActivity() {
         }
     }
 
+
+    private var telefono = ""
+
     // Método para mostrar el diálogo con información del cliente
     private fun mostrarInfoCliente(uidCliente: String) {
         // Crear el diálogo
         val dialog = Dialog(this)
 
-        // Usar el nombre correcto del archivo layout
         dialog.setContentView(R.layout.dialog_info_cliente)
 
         // Obtener referencias a las vistas del diálogo
@@ -86,13 +94,10 @@ class DetalleOrdenVActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("Usuarios")
         ref.child(uidCliente).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                // Log para depuración
-                Log.d("InfoCliente", "Datos obtenidos: ${snapshot.value}")
-
                 // Obtener los datos del cliente
                 val nombres = snapshot.child("nombres").value?.toString() ?: ""
                 val dni = snapshot.child("dni").value?.toString() ?: ""
-                val telefono = snapshot.child("telefono").value?.toString() ?: ""
+                telefono = snapshot.child("telefono").value?.toString() ?: ""
                 val direccion = snapshot.child("direccion").value?.toString() ?: ""
                 val imagenUrl = snapshot.child("imagen").value?.toString() ?: ""
 
@@ -121,26 +126,82 @@ class DetalleOrdenVActivity : AppCompatActivity() {
             }
         })
 
-        // Configurar el evento de cierre
+        // Configurar el botón de llamar
+        btnLlamar.setOnClickListener {
+            if (telefono.isNotEmpty() && telefono != "null"){
+                if (ContextCompat.checkSelfPermission(applicationContext,
+                        android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED){
+                    // Permiso concedido, realizar llamada
+                    llamarCliente(telefono)
+                } else {
+                    // Solicitar permiso
+                    permisoLlamar.launch(android.Manifest.permission.CALL_PHONE)
+                }
+            } else {
+                Toast.makeText(applicationContext, "El cliente no registró su número de teléfono", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Botón SMS (con funcionalidad)
+        btnSms.setOnClickListener {
+            if (telefono.isNotEmpty() && telefono != "null"){
+                if (ContextCompat.checkSelfPermission(applicationContext,
+                        android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
+                    /*SI el permiso esta concedido*/
+                    smsCliente(telefono)
+                }else{
+                    /*Si el permiso no esta cocedido*/
+                    permisoSms.launch(Manifest.permission.SEND_SMS)
+                }
+            }else {
+                Toast.makeText(this, "El cliente no registró su número de teléfono", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Configurar cierre del diálogo
         ibCerrar.setOnClickListener {
             dialog.dismiss()
         }
 
-        // Configurar los botones de llamar y SMS (por ahora sin funcionalidad)
-        btnLlamar.setOnClickListener {
-            Toast.makeText(this, "Funcionalidad de llamada no implementada", Toast.LENGTH_SHORT).show()
-        }
-
-        btnSms.setOnClickListener {
-            Toast.makeText(this, "Funcionalidad de SMS no implementada", Toast.LENGTH_SHORT).show()
-        }
-
-        // Ajustar el diálogo para que no se cancele al tocar fuera
         dialog.setCanceledOnTouchOutside(false)
-
-        // Mostrar el diálogo
         dialog.show()
     }
+
+    // Función para realizar la llamada
+    private fun llamarCliente(telefono: String){
+        val intent = Intent(Intent.ACTION_CALL)
+        intent.data = Uri.parse("tel:$telefono")
+        startActivity(intent)
+    }
+
+    // Registro para solicitud de permiso de llamada
+    private val permisoLlamar =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { concedido ->
+            if (concedido) {
+                llamarCliente(telefono)
+            } else {
+                Toast.makeText(applicationContext, "El permiso de llamada telefónica no fue concedido", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    // Función para enviar SMS (corregida)
+    private fun smsCliente(telefono: String){
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse("smsto:$telefono")
+        intent.putExtra("sms_body", "Estimado cliente, le escribimos de la tienda virtual")
+        startActivity(intent)
+    }
+
+    // Registro para solicitud de permiso de SMS (corregido)
+    private val permisoSms =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()){ concedido ->
+            if (concedido){
+                smsCliente(telefono)  // Corrección: llamamos a smsCliente, no a llamarCliente
+            }else{
+                Toast.makeText(applicationContext, "El permiso de mensajería SMS no fue concedido", Toast.LENGTH_SHORT).show()
+            }
+        }
+
 
     private fun estadoOrdenMenu() {
         val popupMenu = PopupMenu(this, binding.IbActualizarOrden)

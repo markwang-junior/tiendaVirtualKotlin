@@ -2,8 +2,11 @@ package com.markwang.tiendavirtualapp_kotlin.Cliente
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -25,6 +28,9 @@ class MainActivityCliente : AppCompatActivity(), NavigationView.OnNavigationItem
     private lateinit var binding: ActivityMainClienteBinding
     private var firebaseAuth : FirebaseAuth?=null
 
+    private var dobleClick = false
+    private val handler = Handler(Looper.getMainLooper())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainClienteBinding.inflate(layoutInflater)
@@ -38,6 +44,21 @@ class MainActivityCliente : AppCompatActivity(), NavigationView.OnNavigationItem
         comprobarSesion()
 
         binding.navigationView.setNavigationItemSelectedListener(this)
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                if (dobleClick){
+                    /*Salimos de la app*/
+                    finish()
+                    return
+                }
+
+                dobleClick = true
+                Toast.makeText(this@MainActivityCliente, "Presione nuevamente para salir", Toast.LENGTH_SHORT).show()
+
+                handler.postDelayed({dobleClick = false}, 2000)
+            }
+        })
 
         val toggle = ActionBarDrawerToggle(
             this,

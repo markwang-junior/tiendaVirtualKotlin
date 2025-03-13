@@ -45,11 +45,13 @@ class AdapdadorProducto : RecyclerView.Adapter<AdapdadorProducto.HolderProducto>
         val modeloProducto = productosArrayList[position]
 
         val nombre = modeloProducto.nombre
+        val categoria = modeloProducto.categoria
 
         cargarPrimeraImg(modeloProducto, holder)
         visualizarDescuento(modeloProducto, holder)
 
         holder.item_nombre_p.text = "${nombre}"
+        holder.item_categoria_p.text ="${categoria}"
 
         holder.Ib_editar.setOnClickListener {
             val intent = Intent(mContext, AgregarProductoActivity::class.java)
@@ -146,6 +148,7 @@ class AdapdadorProducto : RecyclerView.Adapter<AdapdadorProducto.HolderProducto>
     inner class HolderProducto(itemView :View) : RecyclerView.ViewHolder(itemView){
         var imagenP = binding.imagenP
         var item_nombre_p = binding.itemNombreP
+        var item_categoria_p = binding.itemCategoriaP
         var item_precio_p = binding.itemPrecioP
         var item_precio_p_desc = binding.itemPrecioPDesc
         var item_nota_p = binding.itemNotaP

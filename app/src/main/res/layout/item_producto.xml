@@ -49,8 +49,6 @@
         </RelativeLayout>
 
 
-
-        
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imagenP"
             android:layout_width="150dp"
@@ -70,6 +68,16 @@
             android:textSize="17dp"
             android:textStyle="bold"
             android:maxLines="1"/>
+
+        <!--Categoria del producto-->
+        <TextView
+            android:id="@+id/item_categoria_p"
+            android:text="@string/item_categoria_p"
+            android:background="@drawable/fondo_plomo"
+            android:padding="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -19,6 +19,12 @@
             android:title="@string/op_categotias_v"
             android:icon="@drawable/ico_categoria"/>
 
+        <!--Productos-->
+        <item
+            android:id="@+id/op_productos_v"
+            android:title="@string/op_productos_v"
+            android:icon="@drawable/ic_productos"/>
+
         <!--Mi tienda-->
         <item
             android:id="@+id/op_mi_tienda_v"

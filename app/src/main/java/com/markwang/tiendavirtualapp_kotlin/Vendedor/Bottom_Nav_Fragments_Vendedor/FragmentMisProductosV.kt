@@ -10,7 +10,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.markwang.tiendavirtualapp_kotlin.Adaptadores.AdapdadorCategoriaV
 import com.markwang.tiendavirtualapp_kotlin.Adaptadores.AdapdadorProducto
+import com.markwang.tiendavirtualapp_kotlin.Modelos.ModeloCategoria
 import com.markwang.tiendavirtualapp_kotlin.Modelos.ModeloProducto
 import com.markwang.tiendavirtualapp_kotlin.R
 import com.markwang.tiendavirtualapp_kotlin.databinding.FragmentMisProductosVBinding
@@ -20,8 +22,8 @@ class FragmentMisProductosV : Fragment() {
     private lateinit var binding : FragmentMisProductosVBinding
     private lateinit var mContext : Context
 
-    private lateinit var productoArrayList : ArrayList<ModeloProducto>
-    private lateinit var adapdadorProductos: AdapdadorProducto
+    private lateinit var categoriasArrayList : ArrayList<ModeloCategoria>
+    private lateinit var adapdadorCategoriaV : AdapdadorCategoriaV
 
     override fun onAttach(context: Context){
         mContext = context
@@ -37,22 +39,23 @@ class FragmentMisProductosV : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        listarProductos()
+        //listarProductos()
+
+        listarCategorias()
     }
 
-    private fun listarProductos() {
-        productoArrayList = ArrayList()
-
-        val ref = FirebaseDatabase.getInstance().getReference("Productos")
+    private fun listarCategorias() {
+        categoriasArrayList = ArrayList()
+        val ref = FirebaseDatabase.getInstance().getReference("Categorias").orderByChild("categoria")
         ref.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                productoArrayList.clear()
+                categoriasArrayList.clear()
                 for (ds in snapshot.children){
-                    val modeloProducto = ds.getValue(ModeloProducto::class.java)
-                    productoArrayList.add(modeloProducto!!)
+                    val modelo = ds.getValue(ModeloCategoria::class.java)
+                    categoriasArrayList.add(modelo!!)
                 }
-                adapdadorProductos = AdapdadorProducto(mContext, productoArrayList)
-                binding.productosRV.adapter = adapdadorProductos
+                adapdadorCategoriaV = AdapdadorCategoriaV(mContext, categoriasArrayList)
+                binding.categoriasRV.adapter = adapdadorCategoriaV
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -60,5 +63,7 @@ class FragmentMisProductosV : Fragment() {
             }
         })
     }
+
+
 
 }
