@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="10dp"
     app:cardUseCompatPadding="true">
-    
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -65,18 +65,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
-            android:textSize="17dp"
+            android:textSize="17sp"
             android:textStyle="bold"
             android:maxLines="1"/>
 
-        <!--Categoria del producto-->
+        <!--Categoria del producto - MODIFICADO-->
         <TextView
             android:id="@+id/item_categoria_p"
             android:text="@string/item_categoria_p"
-            android:background="@drawable/fondo_plomo"
+            android:background="@drawable/fondo_verde_categoria"
             android:padding="5dp"
             android:layout_marginTop="5dp"
-            android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <RelativeLayout
@@ -106,12 +108,6 @@
 
         </RelativeLayout>
 
-
-
-
-
-        
-        
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </com.google.android.material.card.MaterialCardView>

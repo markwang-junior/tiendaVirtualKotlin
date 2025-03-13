@@ -18,7 +18,10 @@
             android:id="@+id/sumaProductos"
             android:text="@string/sumaProductos"
             android:layout_gravity="center"
-            android:textSize="20sp"
+            android:textSize="18sp"
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -26,6 +29,7 @@
             android:id="@+id/carritoRv"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_carrito_c"
+            android:layout_marginBottom="50dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>

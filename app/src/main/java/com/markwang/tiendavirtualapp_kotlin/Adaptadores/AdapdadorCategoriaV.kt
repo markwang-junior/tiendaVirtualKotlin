@@ -2,6 +2,7 @@ package com.markwang.tiendavirtualapp_kotlin.Adaptadores
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.markwang.tiendavirtualapp_kotlin.Modelos.ModeloCategoria
 import com.markwang.tiendavirtualapp_kotlin.R
+import com.markwang.tiendavirtualapp_kotlin.Vendedor.Productos.ProductosCatVActivity
 import com.markwang.tiendavirtualapp_kotlin.databinding.ItemCategoriaVBinding
 
 
@@ -73,7 +75,10 @@ class AdapdadorCategoriaV : RecyclerView.Adapter<AdapdadorCategoriaV.HolderCateg
         }
 
         holder.item_ver_productos.setOnClickListener {
+            val intent = Intent(mContext, ProductosCatVActivity::class.java)
+            intent.putExtra("nombreCat", categoria)
             Toast.makeText(mContext, "Categoria seleccionada ${categoria} ", Toast.LENGTH_SHORT).show()
+            mContext.startActivity(intent)
 
         }
     }

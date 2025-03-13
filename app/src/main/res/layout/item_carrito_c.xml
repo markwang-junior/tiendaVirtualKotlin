@@ -105,7 +105,7 @@
             <!--Eliminar del carrito de compras-->
             <ImageButton
                 android:id="@+id/btnEliminar"
-                android:src="@drawable/ico_eliminar_carrito"
+                android:src="@drawable/ico_eliminar_prod_carr"
                 android:background="@null"
                 android:layout_marginStart="30dp"
                 android:layout_width="wrap_content"

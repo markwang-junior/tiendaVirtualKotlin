@@ -115,8 +115,9 @@
 
     <!--Registro con número teléfono-->
     <string name="txtLoginTelC">Login con teléfono</string>
+    <string name="txtLoginMensaje">Necesitamos que ingrese sunúmero telefóno para continuar</string>
     <string name="etTelefonoC">Teléfono</string>
-    <string name="btnEnviarCodigo">Enviar código</string>
+    <string name="btnEnviarCodigo">Enviar código SMS</string>
     <string name="etCodVer">Código</string>
     <string name="btnVerificarCod">Verificar código</string>
     <string name="tvReenviarCod">¿No llegó código?.<b>Reenviar</b></string>
@@ -230,6 +231,9 @@
     <string name="txtActNomCat">Actualizar nombre cat.</string>
     <string name="etNuevoNomCat">Nombre de cat.</string>
     <string name="btnActualizarNomCat">Actualizar</string>
+    
+    <string name="btnAnterior">Anterior</string>
+    <string name="btnSiguiente">Siguiente</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

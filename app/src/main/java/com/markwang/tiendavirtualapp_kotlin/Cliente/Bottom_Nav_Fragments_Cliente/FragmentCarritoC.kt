@@ -136,7 +136,7 @@ class FragmentCarritoC : Fragment() {
                         if (precioFinal!=null){
                             suma += precioFinal.toDouble()
                         }
-                        binding.sumaProductos.setText(suma.toString().plus(" €"))
+                        binding.sumaProductos.setText("Total: ${suma.toString().plus(" €")}")
                     }
                 }
 

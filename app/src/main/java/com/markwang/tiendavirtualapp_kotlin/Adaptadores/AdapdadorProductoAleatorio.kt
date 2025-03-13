@@ -43,11 +43,13 @@ class AdapdadorProductoAleatorio : RecyclerView.Adapter<AdapdadorProductoAleator
         val modeloProducto = productosArrayList[position]
 
         val nombreP = modeloProducto.nombre
+        val categoriaP = modeloProducto.categoria
 
         cargarPrimeraImg(modeloProducto, holder)
         visualizarDescuento(modeloProducto, holder)
 
         holder.nombreP.text = "${nombreP}"
+        holder.item_categoria_p.text = "${categoriaP}"
 
         holder.itemView.setOnClickListener {
             val intent = Intent(mContext, DetalleProductoActivity::class.java)
@@ -71,7 +73,7 @@ class AdapdadorProductoAleatorio : RecyclerView.Adapter<AdapdadorProductoAleator
             holder.precioP.paintFlags = holder.precioP.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         } else {
             // No tiene descuento, ocultar vistas de descuento
-            holder.nombreP.visibility = View.GONE
+            holder.notaDescP.visibility = View.GONE
             holder.precioDescP.visibility = View.GONE
 
             // Mostrar solo el precio original
@@ -118,6 +120,7 @@ class AdapdadorProductoAleatorio : RecyclerView.Adapter<AdapdadorProductoAleator
         var precioP = binding.itemPrecioP
         var precioDescP = binding.itemPrecioPDesc
         var notaDescP = binding.itemNotaP
+        var item_categoria_p = binding.itemCategoriaP
     }
 
 

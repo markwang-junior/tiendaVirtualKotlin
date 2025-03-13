@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.disklrucache.DiskLruCache.Value
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -26,6 +28,13 @@ class FragmentProductosV : Fragment() {
 
     private lateinit var productoArrayList : ArrayList<ModeloProducto>
     private lateinit var adapdadorProductos: AdapdadorProducto
+
+    private val cantidadProductos = 4
+    private var ultimoProductoVisible : DataSnapshot ?= null
+    private var primerProductoVisible : DataSnapshot ?= null
+
+    private var cargandoDatos = false
+    private var primeraPagina = true
 
     private val handler = Handler(Looper.getMainLooper())
     private var searchRunnable : Runnable?= null
@@ -70,6 +79,93 @@ class FragmentProductosV : Fragment() {
 
             }
         })
+
+        binding.btnAnterior.isEnabled = false
+
+        binding.btnAnterior.setOnClickListener {
+            if (!cargandoDatos && !primeraPagina){
+                cargarPaginaAnterior()
+            }
+        }
+
+        binding.btnSiguiente.setOnClickListener {
+            if (!cargandoDatos){
+                cargarPaginaSiguiente()
+            }
+        }
+
+        productoArrayList = ArrayList()
+        adapdadorProductos = AdapdadorProducto(mContext, productoArrayList)
+        binding.productosRV.adapter = adapdadorProductos
+
+        binding.productosRV.layoutManager = GridLayoutManager(mContext, 2)
+
+        listarProductos()
+    }
+
+    private fun cargarPaginaSiguiente() {
+        listarProductos()
+        primeraPagina = false
+        binding.btnAnterior.isEnabled = true
+    }
+
+    private fun cargarPaginaAnterior() {
+        if (primerProductoVisible!=null){
+            cargandoDatos = true
+
+            val ref = FirebaseDatabase.getInstance().getReference("Productos")
+
+            var query = ref.orderByKey().endBefore(primerProductoVisible!!.key).limitToLast(cantidadProductos)
+            query.addListenerForSingleValueEvent(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    productoArrayList.clear()
+                    if (snapshot.hasChildren()){
+                        primerProductoVisible = snapshot.children.first()
+                        ultimoProductoVisible = snapshot.children.last()
+
+                        for (ds in snapshot.children){
+                            val modeloPrdocuto = ds.getValue(ModeloProducto::class.java)
+                            if (modeloPrdocuto!= null){
+                                productoArrayList.add(modeloPrdocuto)
+                            }
+                        }
+
+                        adapdadorProductos.notifyDataSetChanged()
+
+                        comprobarPrimeraPagina()
+                    }
+
+                    cargandoDatos = false
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    cargandoDatos = false
+                }
+            })
+        }
+    }
+
+    private fun comprobarPrimeraPagina() {
+        val ref = FirebaseDatabase.getInstance().getReference("Productos")
+
+        ref.orderByKey().limitToFirst(1).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    /*Obtener el primer producto de la BD*/
+                    val primerProdBD = snapshot.children.first()
+
+                    /*Verificar si el primer elemento de BD es igual al primerProductoVisible*/
+                    primeraPagina = primerProductoVisible?.key == primerProdBD.key /*true*/
+
+                    binding.btnAnterior.isEnabled = !primeraPagina /*false*/
+                    binding.btnSiguiente.isEnabled = true
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     private fun buscarProducto(nombreProducto: String) {
@@ -101,24 +197,58 @@ class FragmentProductosV : Fragment() {
     }
 
     private fun listarProductos() {
-        productoArrayList = ArrayList()
+        cargandoDatos = true /*La carga de datos ha empezado*/
 
         val ref = FirebaseDatabase.getInstance().getReference("Productos")
-        ref.addValueEventListener(object : ValueEventListener {
+        var query = ref.orderByKey().limitToFirst(cantidadProductos)
+
+        if (ultimoProductoVisible !=null){
+            /*Si no estamos en la primera página*/
+            /*Esta consulta nos indica que se debe empezar a recuperar datos despúes de la clave especificada
+             * que en este casao es ultimo productoVisible*/
+            query = ref.orderByKey().startAfter(ultimoProductoVisible!!.key).limitToFirst(cantidadProductos)
+            primeraPagina = false
+        }else{
+            /*Estamos en la primera página*/
+            primeraPagina = true
+        }
+
+        query.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 productoArrayList.clear()
-                for (ds in snapshot.children){
-                    val modeloProducto = ds.getValue(ModeloProducto::class.java)
-                    productoArrayList.add(modeloProducto!!)
+
+                if (snapshot.hasChildren()){
+                    primerProductoVisible = snapshot.children.first() /*Almacenamos el primer producto visible*/
+                    ultimoProductoVisible = snapshot.children.last() /*Almacenamos el ultimo producto visible*/
+
+                    for (ds in snapshot.children){
+
+                        val modeloProducto = ds.getValue(ModeloProducto::class.java)
+                        if (modeloProducto != null){
+                            productoArrayList.add(modeloProducto)
+                        }
+                    }
+
+                    adapdadorProductos.notifyDataSetChanged()
+
+                    binding.btnAnterior.isEnabled =!primeraPagina
+                    binding.btnSiguiente.isEnabled = snapshot.childrenCount.toInt() == cantidadProductos
+
+                }else{
+                    /*Desabilitar el botón de siguiente si no hay más prodictos*/
+                    binding.btnSiguiente.isEnabled = false
                 }
-                adapdadorProductos = AdapdadorProducto(mContext, productoArrayList)
-                binding.productosRV.adapter = adapdadorProductos
+
+                cargandoDatos = false /*La carga de datos ha terminado*/
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                cargandoDatos = false /*La carga de datos ha terminado*/
             }
         })
+
+
+
     }
 
 }
