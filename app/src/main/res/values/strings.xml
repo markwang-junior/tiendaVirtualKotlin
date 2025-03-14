@@ -124,6 +124,7 @@
 
     <!--Detalle del producto-->
     <string name="txtDetalleProducto">Detalles del pedido</string>
+    <string name="tvDejarCalificacion"><u>Escribir un comentario</u></string>
     <string name="nombrePD">Nombre del producto</string>
     <string name="descripcionPDTXT">Información general:</string>
     <string name="descripcionPD">Descripción</string>
@@ -231,9 +232,16 @@
     <string name="txtActNomCat">Actualizar nombre cat.</string>
     <string name="etNuevoNomCat">Nombre de cat.</string>
     <string name="btnActualizarNomCat">Actualizar</string>
-    
+
     <string name="btnAnterior">Anterior</string>
     <string name="btnSiguiente">Siguiente</string>
+
+    <!--Calificación de un producto-->
+    <string name="txtCalificacion">Calificar producto</string>
+    <string name="txtcalificar">¿Cómo calificarías este producto?</string>
+    <string name="tvNombreP">Funko Pop </string>
+    <string name="txtopinion">¿Qué te gustaria decir acerca dd este producto?</string>
+    <string name="etOpinion">Comparte tu experiencia</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

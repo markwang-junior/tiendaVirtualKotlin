@@ -1,6 +1,7 @@
 package com.markwang.tiendavirtualapp_kotlin.DetalleProducto
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
@@ -17,6 +18,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.markwang.tiendavirtualapp_kotlin.Adaptadores.AdapdadorImgSlider
+import com.markwang.tiendavirtualapp_kotlin.Calificacion.CalificarProductoActivity
 import com.markwang.tiendavirtualapp_kotlin.Modelos.ModeloImgSlider
 import com.markwang.tiendavirtualapp_kotlin.Modelos.ModeloProducto
 import com.markwang.tiendavirtualapp_kotlin.R
@@ -46,6 +48,13 @@ class DetalleProductoActivity : AppCompatActivity() {
 
         binding.IbRegresar.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.tvDejarCalificacion.setOnClickListener {
+            val intent = Intent(this, CalificarProductoActivity::class.java)
+            intent.putExtra("idProducto", idProducto)
+            startActivity(intent)
+
         }
 
         // Añadir evento al botón de agregar al carrito

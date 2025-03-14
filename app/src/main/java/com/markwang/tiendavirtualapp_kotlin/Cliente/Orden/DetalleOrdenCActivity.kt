@@ -104,7 +104,7 @@ class DetalleOrdenCActivity : AppCompatActivity() {
                 binding.idOrdenD.text = idOrden
                 binding.fechaOrdenD.text = fecha
                 binding.estadoOrdenD.text = estadoOrden
-                binding.costoOrdenD.text = costo
+                binding.costoOrdenD.text = costo.plus(" €")
 
                 if (estadoOrden.equals("Solicitud recibida")){
                     binding.estadoOrdenD.setTextColor(ContextCompat.getColor(this@DetalleOrdenCActivity, R.color.azul_marino_oscuro))

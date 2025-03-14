@@ -315,7 +315,7 @@ class DetalleOrdenVActivity : AppCompatActivity() {
                 binding.idOrdenD.text = idOrden
                 binding.fechaOrdenD.text = fecha
                 binding.estadoOrdenD.text = estadoOrden
-                binding.costoOrdenD.text = costo
+                binding.costoOrdenD.text = costo.plus(" €")
 
                 if (estadoOrden.equals("Solicitud recibida")) {
                     binding.estadoOrdenD.setTextColor(

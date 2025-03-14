@@ -57,10 +57,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
+            <!--Dejar reseña-->
+            <TextView
+                android:id="@+id/tvDejarCalificacion"
+                android:text="@string/tvDejarCalificacion"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:textSize="15sp"
+                android:layout_below="@id/nombrePD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <!--Para deslizar las imágenes del producto-->
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/imagenVP"
-                android:layout_below="@id/nombrePD"
+                android:layout_below="@id/tvDejarCalificacion"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"/>
 
