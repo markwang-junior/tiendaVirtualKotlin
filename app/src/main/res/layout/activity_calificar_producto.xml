@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="55dp">
 
-
         <ImageButton
             android:id="@+id/Ib_regresar"
             android:src="@drawable/ico_regresar"
@@ -31,6 +30,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+        <!-- Posicionamiento al estilo de la captura -->
+
+        <!-- Botón para eliminar en el extremo derecho -->
+        <ImageButton
+            android:id="@+id/Ib_eliminar_calif"
+            android:background="@android:color/transparent"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ico_eliminar"
+            android:visibility="gone"
+            android:layout_alignParentEnd="true"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- Botón de actualizar justo a la izquierda del de eliminar -->
+        <ImageButton
+            android:id="@+id/Ib_act_calif"
+            android:background="@android:color/transparent"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:layout_toStartOf="@id/Ib_eliminar_calif"
+            android:visibility="gone"
+            android:src="@drawable/ic_act_calif"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <!-- Botón de publicar reemplazado por los anteriores -->
         <ImageView
             android:id="@+id/Ib_calificar"
             android:src="@drawable/ico_check"
@@ -46,9 +72,9 @@
             android:background="#ccc"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
-
-
     </RelativeLayout>
+
+
 
     <RelativeLayout
         android:layout_below="@+id/toolbarRL"
@@ -92,6 +118,8 @@
             android:stepSize="1"
             android:rating="0"
             android:layout_centerHorizontal="true"
+            android:progressTint="@android:color/holo_orange_light"
+            android:progressBackgroundTint="@android:color/darker_gray"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

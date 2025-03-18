@@ -124,6 +124,8 @@
 
     <!--Detalle del producto-->
     <string name="txtDetalleProducto">Detalles del pedido</string>
+    <string name="tvPromCal">0.0/5</string>
+    <string name="tvTotalCal">(0)</string>
     <string name="tvDejarCalificacion"><u>Escribir un comentario</u></string>
     <string name="nombrePD">Nombre del producto</string>
     <string name="descripcionPDTXT">Información general:</string>
@@ -242,6 +244,10 @@
     <string name="tvNombreP">Funko Pop </string>
     <string name="txtopinion">¿Qué te gustaria decir acerca dd este producto?</string>
     <string name="etOpinion">Comparte tu experiencia</string>
+
+    <string name="tvNombreUsuarioCal">Nombre de usuario</string>
+    <string name="tvReseniaCal">Reseña</string>
+    <string name="txtMostrarCal">Calificaciones</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

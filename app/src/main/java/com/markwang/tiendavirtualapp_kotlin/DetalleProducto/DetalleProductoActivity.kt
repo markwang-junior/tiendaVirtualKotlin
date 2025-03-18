@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.markwang.tiendavirtualapp_kotlin.Adaptadores.AdapdadorImgSlider
 import com.markwang.tiendavirtualapp_kotlin.Calificacion.CalificarProductoActivity
+import com.markwang.tiendavirtualapp_kotlin.Calificacion.MostrarCalificacionesActivity
 import com.markwang.tiendavirtualapp_kotlin.Modelos.ModeloImgSlider
 import com.markwang.tiendavirtualapp_kotlin.Modelos.ModeloProducto
 import com.markwang.tiendavirtualapp_kotlin.R
@@ -57,6 +58,14 @@ class DetalleProductoActivity : AppCompatActivity() {
 
         }
 
+        binding.tvPromCal.setOnClickListener {
+            val intent = Intent(this, MostrarCalificacionesActivity::class.java)
+            intent.putExtra("idProducto", idProducto)
+            startActivity(intent)
+        }
+
+        calcularPromedioCal(idProducto)
+
         // Añadir evento al botón de agregar al carrito
         binding.itemAgregarCarritoP.setOnClickListener {
             if (modeloProducto != null) {
@@ -65,6 +74,47 @@ class DetalleProductoActivity : AppCompatActivity() {
                 Toast.makeText(this, "Espere un momento, cargando producto", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun calcularPromedioCal(idProducto: String) {
+        val ref = FirebaseDatabase.getInstance().getReference("Productos/$idProducto/calificaciones")
+        ref.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var sumaCalificaciones = 0.0
+                var totalCalificaciones = 0
+
+                for (calificacionSn in snapshot.children){
+                    // Cambiar Int por Float para coincidir con el tipo guardado
+                    val calificacion = calificacionSn.child("calificacion").getValue(Float::class.java)
+
+                    if (calificacion != null){
+                        sumaCalificaciones += calificacion
+                        totalCalificaciones++
+                    }
+                }
+
+                if (totalCalificaciones > 0){
+                    val promedio = sumaCalificaciones / totalCalificaciones
+
+                    // Redondear a 1 decimal para mejor presentación
+                    val promedioFormateado = String.format("%.1f", promedio)
+
+                    binding.tvPromCal.text = "$promedioFormateado/5"
+                    binding.tvTotalCal.text = "($totalCalificaciones)"
+                    binding.ratingBar.rating = promedio.toFloat()
+                } else {
+                    binding.tvPromCal.text = getString(R.string.tvPromCal)
+                    binding.tvTotalCal.text = getString(R.string.tvTotalCal)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Manejar el error adecuadamente
+                Toast.makeText(this@DetalleProductoActivity,
+                    "Error al cargar calificaciones: ${error.message}",
+                    Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun cargarInfoProducto() {

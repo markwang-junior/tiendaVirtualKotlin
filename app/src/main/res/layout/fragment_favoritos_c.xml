@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Cliente.Bottom_Nav_Fragments_Cliente.FragmentFavoritosC">
 
+    <!-- RecyclerView para mostrar los favoritos -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favoritosRv"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -13,4 +15,51 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</FrameLayout>
+    <!-- Layout para favoritos vacíos -->
+    <RelativeLayout
+        android:id="@+id/favoritosVacioLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/ico_no_favorito"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No tienes favoritos guardados"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Añade productos a tus favoritos para verlos aquí"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnExplorarTienda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ir_a_tienda"
+                app:cornerRadius="8dp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

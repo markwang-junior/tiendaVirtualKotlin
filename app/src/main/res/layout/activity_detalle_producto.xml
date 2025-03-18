@@ -57,6 +57,51 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
+            <!--Rating bar-->
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_below="@id/nombrePD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:numStars="5"
+                android:stepSize="1"
+                android:rating="0"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
+                android:progressTint="@android:color/holo_orange_light"
+                android:progressBackgroundTint="@android:color/darker_gray"
+                style="?android:attr/ratingBarStyleSmall"/>
+
+            <!--Promedio-->
+            <TextView
+                android:id="@+id/tvPromCal"
+                android:text="@string/tvPromCal"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="15sp"
+                android:layout_marginEnd="15dp"
+                android:layout_toEndOf="@id/ratingBar"
+                android:layout_below="@id/nombrePD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <!--Total de la calificaciones-->
+            <TextView
+                android:id="@+id/tvTotalCal"
+                android:text="@string/tvTotalCal"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="15sp"
+                android:layout_marginEnd="15dp"
+                android:layout_toEndOf="@id/tvPromCal"
+                android:layout_below="@id/nombrePD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <!--Dejar reseña-->
             <TextView
                 android:id="@+id/tvDejarCalificacion"
@@ -64,6 +109,8 @@
                 android:textStyle="bold"
                 android:layout_marginTop="5dp"
                 android:textSize="15sp"
+                android:layout_marginBottom="10dp"
+                android:layout_toEndOf="@id/tvTotalCal"
                 android:layout_below="@id/nombrePD"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

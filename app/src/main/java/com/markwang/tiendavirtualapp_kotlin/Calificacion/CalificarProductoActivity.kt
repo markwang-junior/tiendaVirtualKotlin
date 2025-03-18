@@ -1,6 +1,7 @@
 package com.markwang.tiendavirtualapp_kotlin.Calificacion
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -32,7 +33,7 @@ class CalificarProductoActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-
+        /*Enviar calificacion*/
         binding.IbCalificar.setOnClickListener{
             val opinion = binding.etOpinion.text.toString().trim()
             val rating = binding.ratingBar.rating
@@ -48,21 +49,84 @@ class CalificarProductoActivity : AppCompatActivity() {
 
         }
 
+        /*Actualizar calificacion*/
+        binding.IbActCalif.setOnClickListener {
+            actualizarCalificacion(idProducto , idResenia)
+        }
+
+        /*Eliminar calificacion*/
+        binding.IbEliminarCalif.setOnClickListener {
+            // Diálogo de confirmación
+            androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Eliminar reseña")
+                .setMessage("¿Estás seguro de que deseas eliminar tu reseña?")
+                .setPositiveButton("Sí") { _, _ ->
+                    eliminarCalificacion(idProducto, idResenia)
+                }
+                .setNegativeButton("No", null)
+                .show()
+        }
+
 
         cargarInfoProducto()
         cargarImgProducto()
         comprobarCalificacion(idProducto)
     }
 
+    private fun eliminarCalificacion(idProducto: String, idResenia: String) {
+        val ref = FirebaseDatabase.getInstance().getReference("Productos/$idProducto/calificaciones/$idResenia")
+
+        ref.removeValue().addOnCompleteListener {task->
+            if (task.isSuccessful){
+                Toast.makeText(this, "Reseña eliminada correctamente",
+                    Toast.LENGTH_SHORT).show()
+                onBackPressedDispatcher.onBackPressed()
+                finish()
+            }else{
+                Toast.makeText(this, "Error al eliminar la reseña",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun actualizarCalificacion(idProducto: String, idResenia: String) {
+        val ref = FirebaseDatabase.getInstance().getReference("Productos/$idProducto/calificaciones/$idResenia")
+
+        val datosActualizados = mapOf(
+            "calificacion" to binding.ratingBar.rating,
+            "resenia" to binding.etOpinion.text.toString().trim()
+        )
+
+        ref.updateChildren(datosActualizados).addOnCompleteListener{task->
+            if (task.isSuccessful){
+                Toast.makeText(this, "Reseña actualizada correctamente",
+                    Toast.LENGTH_SHORT).show()
+                onBackPressedDispatcher.onBackPressed()
+                finish()
+            }else{
+                Toast.makeText(this, "Error al actualizar la reseña",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private var idResenia = ""
     private fun comprobarCalificacion(idProducto: String) {
+        var resenia : String = ""
+        var calificacion : Float = 0.0f
+
         val ref = FirebaseDatabase.getInstance().getReference("Productos")
         val uidUsuario = firebaseAuth.uid
 
-        ref.child(idProducto).child("Calificaciones").get().addOnSuccessListener { dataSnapshot->
+        // Cambia "Calificaciones" por "calificaciones" para que coincida
+        ref.child(idProducto).child("calificaciones").get().addOnSuccessListener { dataSnapshot->
             var calificado = false
 
             for (calificacionSnapshot in dataSnapshot.children){
                 val uidCliente = calificacionSnapshot.child("uidUsuario").getValue(String::class.java)
+                resenia = calificacionSnapshot.child("resenia").getValue(String::class.java) ?: "Sin reseña"
+                calificacion = calificacionSnapshot.child("calificacion").getValue(Float::class.java) ?: 0.0f
+                idResenia = calificacionSnapshot.child("idResenia").getValue(String :: class.java) ?: "Sin id"
 
                 if (uidCliente == uidUsuario){
                     calificado = true
@@ -71,26 +135,20 @@ class CalificarProductoActivity : AppCompatActivity() {
             }
 
             if (calificado){
-                Toast.makeText(this, "Ya has calificado este producto",
-                    Toast.LENGTH_SHORT).show()
+                /*Si el cliente ha calificado*/
+                binding.etOpinion.setText(resenia)
+                binding.ratingBar.rating = calificacion
+                binding.IbCalificar.visibility = View.GONE /*Se oculta el botón de publicar*/
+                binding.IbActCalif.visibility = View.VISIBLE /*Se muestra el botón para actualizar*/
+                binding.IbEliminarCalif.visibility = View.VISIBLE /*Se muestra el botón para eliminar*/
             }else{
                 Toast.makeText(this, "No has calificado este producto",
                     Toast.LENGTH_SHORT).show()
-
             }
-
-
-
-
         }.addOnFailureListener {
             Toast.makeText(this, "Error al comprobar las calificaciones: ${it.message}",
                 Toast.LENGTH_SHORT).show()
-
         }
-
-
-
-
     }
 
     private fun enviarCalificacion(idProducto: String, rating : Float , opinion : String) {
