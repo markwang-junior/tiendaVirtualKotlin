@@ -2,41 +2,44 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="10dp">
 
-    <!--Nomvre del usuario-->
+    <!--Nombre del usuario-->
     <TextView
-        android:id="@+id/tvNombreUsuarioCal"
-        android:text="@string/tvNombreUsuarioCal"
-        android:textSize="16sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    android:id="@+id/tvNombreUsuarioCal"
+    android:text="@string/tvNombreUsuarioCal"
+    android:textSize="16sp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
 
     <!--Rating bar-->
     <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="5dp"
-        android:numStars="5"
-        android:stepSize="1"
-        android:rating="0"
-        android:scaleX="0.5"
-        android:scaleY="0.5"
-        android:progressTint="@android:color/holo_orange_light"
-        android:progressBackgroundTint="@android:color/darker_gray"/>
-    
+    android:id="@+id/ratingBar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginTop="5dp"
+    android:numStars="5"
+    android:stepSize="1"
+    android:rating="0"
+    style="?android:attr/ratingBarStyleSmall"
+    android:progressTint="@android:color/holo_orange_light"
+    android:progressBackgroundTint="@android:color/darker_gray"/>
+
     <!--Reseña-->
     <TextView
-        android:id="@+id/tvReseniaCal"
-        android:text="@string/tvReseniaCal"
-        android:textSize="16sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    android:id="@+id/tvReseniaCal"
+    android:text="@string/tvReseniaCal"
+    android:textSize="16sp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
 
-        
-
-</LinearLayout>
+    <!-- Separador opcional para distinguir mejor las reseñas -->
+<View
+android:layout_width="match_parent"
+android:layout_height="1dp"
+android:layout_marginTop="8dp"
+android:background="#EEEEEE"/>
+    </LinearLayout>

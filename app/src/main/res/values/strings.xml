@@ -249,6 +249,19 @@
     <string name="tvReseniaCal">Reseña</string>
     <string name="txtMostrarCal">Calificaciones</string>
 
+    <string name="txtEstados">Estados del pedido</string>
+    <string name="tvEstado1">Solicitud recibida</string>
+    <string name="tvEstado2">En preparación</string>
+    <string name="tvEstado3">Entregado</string>
+    <string name="tvEstado4">Cancelado</string>
+
+    <string name="txtGanancias">Ganancias</string>
+    <string name="tvGanancias">0 €</string>
+
+    <string name="txtPerdidas">Pérdidas</string>
+    <string name="tvPerdidas">0 €</string>
+
+    <string name="btnVerClientes">Mis clientes</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

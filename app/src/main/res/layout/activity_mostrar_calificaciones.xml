@@ -31,7 +31,7 @@
         
         <View
             android:layout_alignParentBottom="true"
-            android:background="·ccc"
+            android:background="#ccc"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
