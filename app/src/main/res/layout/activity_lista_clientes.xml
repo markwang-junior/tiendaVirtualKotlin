@@ -1,18 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Vendedor.ListaClientes.ListaClientesActivity">
 
+    <!-- Toolbar -->
+    <RelativeLayout
+        android:id="@+id/rlToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/celeste_oscuro">
+
+        <ImageButton
+            android:id="@+id/IbRegresar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ico_regresar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Lista de Clientes"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <!-- Mensaje de "No hay clientes" -->
+    <TextView
+        android:id="@+id/tvNoClientes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="No hay clientes registrados"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <!-- RecyclerView para la lista de clientes -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/clienteRV"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_cliente"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@id/rlToolbar"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_cliente" />
 
 </RelativeLayout>

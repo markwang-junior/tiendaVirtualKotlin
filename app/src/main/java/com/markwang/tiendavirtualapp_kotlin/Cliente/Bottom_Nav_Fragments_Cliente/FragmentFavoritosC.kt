@@ -93,6 +93,7 @@ class FragmentFavoritosC : Fragment() {
                     }
 
                     Handler().postDelayed({
+                        productoArrayList.sortBy { it.nombre }
                         productoAdapdador = AdapdadorProductoC(mContext, productoArrayList)
                         binding.favoritosRv.adapter = productoAdapdador
 

@@ -44,6 +44,11 @@ class AgregarProductoActivity : AppCompatActivity() {
         binding = ActivityAgregarProductoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Configurar el botón de regreso
+        binding.IbRegresar.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         cargarCategorias()
 
         progressDialog = ProgressDialog(this)

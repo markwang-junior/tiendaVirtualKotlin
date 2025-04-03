@@ -81,6 +81,7 @@ class ProductosCatCActivity : AppCompatActivity() {
                         val modeloProducto = ds.getValue(ModeloProducto::class.java)
                         productoArrayList.add(modeloProducto!!)
                     }
+                    productoArrayList.sortBy { it.nombre }
                     adaptadorProductos = AdapdadorProductoC(this@ProductosCatCActivity,productoArrayList )
                     binding.productosRV.adapter = adaptadorProductos
                 }

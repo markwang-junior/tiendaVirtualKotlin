@@ -30,8 +30,12 @@ class ProductosCatVActivity : AppCompatActivity() {
 
         binding.txtProductoCat.text = "Categoria - ${nombreCat}"
 
-        listarProductos(nombreCat)
+        // Configurar el botón de regreso
+        binding.IbRegresar.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
+        listarProductos(nombreCat)
     }
 
     private fun listarProductos(nombreCat : String) {
@@ -50,7 +54,7 @@ class ProductosCatVActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                // Manejar el error
             }
         })
     }

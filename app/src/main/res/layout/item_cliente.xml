@@ -1,97 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="4dp"
     app:cardCornerRadius="10dp"
-    app:cardUseCompatPadding="true">
+    app:cardElevation="3dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-        <!--Imagen de perfil-->
-        <ImageView
-            android:id="@+id/imagenC"
-            android:layout_marginTop="2dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/img_perfil"
-            android:layout_width="100dp"
-            android:layout_height="100dp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <!--Nombres-->
-        <TextView
-            android:id="@+id/nombresCperfil"
-            android:text="@string/nombresCperfil"
-            android:layout_toEndOf="@id/imagenC"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imagenC"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_perfil"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
-        <!--Email-->
-        <TextView
-            android:id="@+id/emailCPerfil"
-            android:text="@string/emailCPerfil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/imagenC"
-            android:layout_below="@id/nombresCperfil"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:textSize="16sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/imagenC"
+                android:orientation="vertical">
 
-        <!--Dni-->
+                <TextView
+                    android:id="@+id/nombresCperfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nombres completos"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/emailCPerfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="email@example.com" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
         <TextView
             android:id="@+id/dniCPerfil"
-            android:text="@string/dniCPerfil"
-            android:layout_toEndOf="@id/imagenC"
-            android:layout_below="@id/emailCPerfil"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="DNI: 12345678X" />
 
-        <!--Dirección-->
-        <TextView
-            android:id="@+id/ubicacion"
-            android:text="@string/ubicacion"
-            android:layout_toEndOf="@id/imagenC"
-            android:layout_below="@id/dniCPerfil"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <!--Teléfono-->
         <TextView
             android:id="@+id/telefonoCPerfil"
-            android:text="@string/telefonoCPerfil"
-            android:layout_toEndOf="@id/imagenC"
-            android:layout_below="@id/ubicacion"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tel: 123456789" />
 
-        <!--Proveedor-->
+        <TextView
+            android:id="@+id/ubicacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dirección: Calle, Ciudad" />
+
         <TextView
             android:id="@+id/proveedorCPerfil"
-            android:text="@string/proveedorCPerfil"
-            android:layout_toEndOf="@id/imagenC"
-            android:layout_below="@id/telefonoCPerfil"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Registro: Google" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
-    </RelativeLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLlamar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:text="Llamar"
+                app:icon="@drawable/ico_llamar"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
-</com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:text="SMS"
+                app:icon="@drawable/ico_mensaje"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

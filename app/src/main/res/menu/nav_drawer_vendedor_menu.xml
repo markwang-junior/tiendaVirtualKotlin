@@ -31,12 +31,6 @@
             android:title="@string/op_mi_tienda_v"
             android:icon="@drawable/ico_mi_tienda"/>
 
-        <!--Reseñas-->
-        <item
-            android:id="@+id/op_resenia_v"
-            android:title="@string/op_resenia_v"
-            android:icon="@drawable/ico_resenias"/>
-
     </group>
 
     <item

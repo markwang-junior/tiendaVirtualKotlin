@@ -21,7 +21,6 @@ import com.markwang.tiendavirtualapp_kotlin.Vendedor.Nav_Fragments_Vendedor.Frag
 import com.markwang.tiendavirtualapp_kotlin.Vendedor.Nav_Fragments_Vendedor.FragmentInicioV
 import com.markwang.tiendavirtualapp_kotlin.Vendedor.Nav_Fragments_Vendedor.FragmentMiTiendaV
 import com.markwang.tiendavirtualapp_kotlin.Vendedor.Nav_Fragments_Vendedor.FragmentProductosV
-import com.markwang.tiendavirtualapp_kotlin.Vendedor.Nav_Fragments_Vendedor.FragmentReseniasV
 import com.markwang.tiendavirtualapp_kotlin.databinding.ActivityMainVendedorBinding
 
 class MainActivityVendedor : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -108,7 +107,6 @@ class MainActivityVendedor : AppCompatActivity(), NavigationView.OnNavigationIte
             R.id.op_mi_tienda_v -> replaceFragment(FragmentMiTiendaV())
             R.id.op_categotias_v -> replaceFragment(FragmentCategoriasV())
             R.id.op_productos_v -> replaceFragment(FragmentProductosV())
-            R.id.op_resenia_v -> replaceFragment(FragmentReseniasV())
             R.id.op_cerrar_sesion_v -> {
                 cerrarSesion()
             }
