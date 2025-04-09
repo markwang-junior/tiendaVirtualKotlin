@@ -1,6 +1,7 @@
 package com.markwang.tiendavirtualapp_kotlin.Vendedor
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -27,6 +28,8 @@ class MainActivityVendedor : AppCompatActivity(), NavigationView.OnNavigationIte
 
     private lateinit var binding: ActivityMainVendedorBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var prefs: SharedPreferences
+    private val PREFS_NAME = "TiendaVirtualPrefs"
 
     private var dobleClick = false
     private val handler = Handler(Looper.getMainLooper())
@@ -40,8 +43,9 @@ class MainActivityVendedor : AppCompatActivity(), NavigationView.OnNavigationIte
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        // Inicializar FirebaseAuth
+        // Inicializar FirebaseAuth y SharedPreferences
         firebaseAuth = FirebaseAuth.getInstance()
+        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
         comprobarSesion()
 
         // Configurar el Navigation Drawer
@@ -78,9 +82,15 @@ class MainActivityVendedor : AppCompatActivity(), NavigationView.OnNavigationIte
     }
 
     private fun cerrarSesion(){
-        firebaseAuth!!.signOut()
+        // Limpiar las preferencias al cerrar sesión
+        val editor = prefs.edit()
+        editor.remove("user_type")
+        editor.remove("user_id")
+        editor.apply()
+
+        firebaseAuth.signOut()
         startActivity(Intent(applicationContext, SeleccionarTipoActivity::class.java))
-        finish()
+        finishAffinity()
         Toast.makeText(applicationContext, "Has cerrado sesión", Toast.LENGTH_SHORT).show()
     }
 

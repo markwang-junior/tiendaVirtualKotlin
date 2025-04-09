@@ -1,3 +1,6 @@
+// app/src/main/java/com/markwang/tiendavirtualapp_kotlin/Cliente/Nav_Fragments_cliente/FragmentMiPerfilC.kt
+// Este archivo mantiene la misma lógica pero con pequeñas mejoras visuales
+
 package com.markwang.tiendavirtualapp_kotlin.Cliente.Nav_Fragments_cliente
 
 import android.app.Activity
@@ -41,7 +44,6 @@ class FragmentMiPerfilC : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         binding = FragmentMiPerfilCBinding.inflate(layoutInflater, container, false)
 
         binding.imgPerfil.setOnClickListener{
@@ -252,6 +254,4 @@ class FragmentMiPerfilC : Fragment() {
                 }
             }
         }
-
-
 }

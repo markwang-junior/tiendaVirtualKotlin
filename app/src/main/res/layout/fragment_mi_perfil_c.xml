@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#F5F5F5"
     tools:context=".Cliente.Nav_Fragments_cliente.FragmentMiPerfilC">
 
     <LinearLayout
@@ -12,16 +13,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!--Toolbar-->
+        <!-- Toolbar -->
         <RelativeLayout
             android:id="@+id/toolbarRL"
             android:layout_width="match_parent"
-            android:layout_height="55dp">
+            android:layout_height="55dp"
+            android:background="@color/white"
+            android:elevation="2dp">
 
             <TextView
                 android:text="@string/txtMiPerfil"
                 android:layout_centerInParent="true"
                 android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/azul_marino_oscuro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -29,142 +34,236 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_alignParentBottom="true"
-                android:background="#ccc"/>
+                android:background="#E0E0E0"/>
 
         </RelativeLayout>
 
-        <!--Informacion del usuario -Cliente-->
+        <!-- Información del usuario - Cliente -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:elevation="1dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imgPerfil"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/img_perfil"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"/>
-            
-            <com.google.android.material.textfield.TextInputLayout
+            <!-- Sección de imagen de perfil con fondo -->
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@color/celeste_claro"
+                android:paddingTop="24dp"
+                android:paddingBottom="16dp">
 
-                <!--Nombres-->
-                <EditText
-                    android:id="@+id/nombresCperfil"
-                    android:hint="@string/nombresCperfil"
-                    android:inputType="textPersonName"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imgPerfil"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:src="@drawable/img_perfil"
+                    android:layout_gravity="center"
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="@color/white"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ico_edit_cat"
+                    android:layout_gravity="center|bottom"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/fondo_verde_categoria"
+                    android:padding="4dp"/>
+
+            </FrameLayout>
+
+            <!-- Sección de formulario con padding -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Nombres -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombres completos"
+                    android:textSize="12sp"
+                    android:textColor="@color/azul_marino_oscuro"
+                    android:layout_marginBottom="4dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:boxBackgroundColor="@color/white"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <EditText
+                        android:id="@+id/nombresCperfil"
+                        android:hint="@string/nombresCperfil"
+                        android:inputType="textPersonName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Email -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:textSize="12sp"
+                    android:textColor="@color/azul_marino_oscuro"
+                    android:layout_marginBottom="4dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:boxBackgroundColor="@color/white"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <EditText
+                        android:id="@+id/emailCPerfil"
+                        android:hint="@string/emailCPerfil"
+                        android:inputType="textEmailAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- DNI -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DNI"
+                    android:textSize="12sp"
+                    android:textColor="@color/azul_marino_oscuro"
+                    android:layout_marginBottom="4dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:boxBackgroundColor="@color/white"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <EditText
+                        android:id="@+id/dniCPerfil"
+                        android:hint="@string/dniCPerfil"
+                        android:inputType="text"
+                        android:maxLength="9"
+                        android:digits="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Teléfono -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Teléfono"
+                    android:textSize="12sp"
+                    android:textColor="@color/azul_marino_oscuro"
+                    android:layout_marginBottom="4dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:boxBackgroundColor="@color/white"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <EditText
+                        android:id="@+id/telefonoCPerfil"
+                        android:hint="@string/telefonoCPerfil"
+                        android:inputType="phone"
+                        android:maxLength="9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Ubicación -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ubicación"
+                    android:textSize="12sp"
+                    android:textColor="@color/azul_marino_oscuro"
+                    android:layout_marginBottom="4dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxBackgroundColor="@color/white"
+                    android:layout_marginBottom="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/ubicacion"
+                        android:hint="@string/ubicacion"
+                        android:inputType="none"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Proveedor -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Proveedor"
+                    android:textSize="12sp"
+                    android:textColor="@color/azul_marino_oscuro"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/proveedorCPerfil"
+                    android:hint="@string/proveedorCPerfil"
+                    android:textSize="16sp"
+                    android:background="@drawable/custom_edittext"
+                    android:padding="12dp"
+                    android:layout_marginBottom="16dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <!--Email-->
-                <EditText
-                    android:id="@+id/emailCPerfil"
-                    android:hint="@string/emailCPerfil"
-                    android:inputType="textEmailAddress"
+                <!-- Botones -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGuardarInfo"
+                    android:text="@string/btnGuardarInfo"
+                    android:layout_gravity="center"
+                    app:cornerRadius="8dp"
+                    android:textAllCaps="false"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:backgroundTint="@color/celeste_oscuro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <!--DNI-->
-                <EditText
-                    android:id="@+id/dniCPerfil"
-                    android:hint="@string/dniCPerfil"
-                    android:inputType="text"
-                    android:maxLength="9"
-                    android:digits="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnActualizarContraseA"
+                    android:text="@string/btnActualizarContraseña"
+                    app:cornerRadius="8dp"
+                    android:layout_gravity="center"
+                    android:textAllCaps="false"
+                    android:layout_marginTop="8dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:backgroundTint="@color/azul_marino_oscuro"
                     android:layout_width="match_parent"
+                    app:icon="@drawable/ico_password"
+                    app:iconGravity="textStart"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"/>
-
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <!--Teléfono-->
-                <EditText
-                    android:id="@+id/telefonoCPerfil"
-                    android:hint="@string/telefonoCPerfil"
-                    android:inputType="phone"
-                    android:maxLength="9"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                app:boxCornerRadiusBottomStart="8dp"
-                app:boxCornerRadiusBottomEnd="8dp"
-                app:boxCornerRadiusTopEnd="8dp"
-                app:boxCornerRadiusTopStart="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <AutoCompleteTextView
-                    android:id="@+id/ubicacion"
-                    android:hint="@string/ubicacion"
-                    android:inputType="none"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!--Proveedor-->
-            <TextView
-                android:id="@+id/proveedorCPerfil"
-                android:hint="@string/proveedorCPerfil"
-                android:textSize="18sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnGuardarInfo"
-                android:text="@string/btnGuardarInfo"
-                android:layout_gravity="center"
-                app:cornerRadius="8dp"
-                android:textAllCaps="true"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnActualizarContraseña"
-                android:text="@string/btnActualizarContraseña"
-                app:cornerRadius="8dp"
-                android:layout_gravity="center"
-                android:textAllCaps="true"
-                android:layout_width="250dp"
-                android:visibility="gone"
-                android:layout_height="wrap_content"/>
-
-
-
-
+            </LinearLayout>
         </LinearLayout>
-
-
     </LinearLayout>
-
-
-
 </ScrollView>

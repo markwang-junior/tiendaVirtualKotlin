@@ -7,8 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
@@ -26,9 +29,11 @@ class LoginTelActivity : AppCompatActivity() {
     private lateinit var progressDialog: ProgressDialog
     private lateinit var firebaseAuth: FirebaseAuth
 
-    private var forceResendingToken : ForceResendingToken?=null
+    private var forceResendingToken : ForceResendingToken? = null
     private lateinit var mCallback : OnVerificationStateChangedCallbacks
-    private var mVerification : String?=null
+    private var mVerification : String? = null
+    private var numeroIntentos = 0
+    private val MAX_INTENTOS = 3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,26 +60,33 @@ class LoginTelActivity : AppCompatActivity() {
             if (otp.isEmpty()){
                 binding.etCodVer.error = "Ingrese código"
                 binding.etCodVer.requestFocus()
-            }else if (otp.length<6){
-                binding.etCodVer.error = "El código debe contener 6 car."
+                mostrarErrorSnackbar("Debe ingresar el código de verificación")
+            } else if (otp.length < 6){
+                binding.etCodVer.error = "El código debe contener 6 caracteres"
                 binding.etCodVer.requestFocus()
-            }else{
+                mostrarErrorSnackbar("El código debe contener 6 caracteres")
+            } else {
                 verificarCodTel(otp)
             }
         }
 
         binding.tvReenviarCod.setOnClickListener {
             if (forceResendingToken != null) {
-                reenviarCodVer()
-            }else{
-                Toast.makeText(this, "No se puede reenviar el código", Toast.LENGTH_SHORT).show()
+                if (numeroIntentos < MAX_INTENTOS) {
+                    reenviarCodVer()
+                    numeroIntentos++
+                } else {
+                    mostrarErrorSnackbar("Has excedido el número máximo de intentos. Inténtalo más tarde.")
+                }
+            } else {
+                mostrarErrorSnackbar("No se puede reenviar el código todavía")
             }
         }
 
     }
 
     private fun verificarCodTel(otp: String) {
-        progressDialog.setMessage("Verificando código")
+        progressDialog.setMessage("Verificando código...")
         progressDialog.show()
 
         val credencial = PhoneAuthProvider.getCredential(mVerification!!, otp)
@@ -82,26 +94,40 @@ class LoginTelActivity : AppCompatActivity() {
     }
 
     private fun signInWithPhoneAuthCredencial(credencial: PhoneAuthCredential) {
-        progressDialog.setMessage("Ingresando")
+        progressDialog.setMessage("Iniciando sesión...")
         progressDialog.show()
 
         firebaseAuth.signInWithCredential(credencial)
-            .addOnSuccessListener {  authResult->
+            .addOnSuccessListener { authResult ->
+                progressDialog.dismiss()
                 if (authResult.additionalUserInfo!!.isNewUser){
                     guardarInfo()
-                }else{
+                } else {
                     startActivity(Intent(this, MainActivityCliente::class.java))
                     finishAffinity()
+                }
+            }
+            .addOnFailureListener { e ->
+                progressDialog.dismiss()
+                when (e) {
+                    is FirebaseAuthInvalidCredentialsException -> {
+                        mostrarErrorSnackbar("Código inválido. Por favor verifica e intenta de nuevo.")
+                        binding.etCodVer.error = "Código inválido"
+                        binding.etCodVer.requestFocus()
+                    }
+                    else -> {
+                        mostrarErrorSnackbar("Error al verificar: ${e.message}")
+                    }
                 }
             }
     }
 
     private fun guardarInfo() {
-        progressDialog.setMessage("Guardando información")
+        progressDialog.setMessage("Guardando información...")
         progressDialog.show()
 
         val uid = firebaseAuth.uid
-        val tiempoReg = Constantes(). obtenerTiempoD()
+        val tiempoReg = Constantes().obtenerTiempoD()
 
         val datosCliente = HashMap<String, Any>()
 
@@ -128,15 +154,14 @@ class LoginTelActivity : AppCompatActivity() {
                 finishAffinity()
                 Toast.makeText(this, "Bienvenido. Por favor completa tu perfil", Toast.LENGTH_LONG).show()
             }
-            .addOnFailureListener {e->
+            .addOnFailureListener { e ->
                 progressDialog.dismiss()
-                Toast.makeText(this@LoginTelActivity,
-                    "${e.message}", Toast.LENGTH_SHORT).show()
+                mostrarErrorSnackbar("Error al guardar datos: ${e.message}")
             }
     }
 
     private fun reenviarCodVer() {
-        progressDialog.setMessage("Enviando código a ${numeroTel}")
+        progressDialog.setMessage("Reenviando código a ${numeroTel}")
         progressDialog.show()
 
         val options = PhoneAuthOptions.newBuilder(firebaseAuth)
@@ -150,20 +175,30 @@ class LoginTelActivity : AppCompatActivity() {
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
-    private  var codigoTel = "" //+34
+    private var codigoTel = "" //+34
     private var numeroTel = "" //677456332
     private var codTelnumTel = "" // +34 677354332
     private fun validarData() {
         codigoTel = binding.telCodePicker.selectedCountryCodeWithPlus
         numeroTel = binding.etTelefonoC.text.toString().trim()
-        codTelnumTel = codigoTel + numeroTel
 
         if (numeroTel.isEmpty()){
             binding.etTelefonoC.error = "Ingrese número teléfono"
             binding.etTelefonoC.requestFocus()
-        }else{
-            verificarNumeroTel()
+            mostrarErrorSnackbar("Debe ingresar un número de teléfono")
+            return
         }
+
+        // Validación básica del número de teléfono
+        if (numeroTel.length < 9) {
+            binding.etTelefonoC.error = "Número de teléfono demasiado corto"
+            binding.etTelefonoC.requestFocus()
+            mostrarErrorSnackbar("El número de teléfono debe tener al menos 9 dígitos")
+            return
+        }
+
+        codTelnumTel = codigoTel + numeroTel
+        verificarNumeroTel()
     }
 
     private fun verificarNumeroTel() {
@@ -181,7 +216,7 @@ class LoginTelActivity : AppCompatActivity() {
     }
 
     private fun phoneLoginCallbacks() {
-        mCallback = object : OnVerificationStateChangedCallbacks(){
+        mCallback = object : OnVerificationStateChangedCallbacks() {
             override fun onCodeSent(verificationId: String, token: ForceResendingToken) {
                 mVerification = verificationId
                 forceResendingToken = token
@@ -191,23 +226,53 @@ class LoginTelActivity : AppCompatActivity() {
                 binding.rlTelefono.visibility = View.GONE
                 binding.rlCodigoVer.visibility = View.VISIBLE
 
-                Toast.makeText(this@LoginTelActivity, "Enviando código ${codTelnumTel}", Toast.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.root,
+                    "Código enviado a $codTelnumTel. Por favor, ingresa el código de 6 dígitos.",
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
+
             override fun onVerificationCompleted(phoneAuthCredencial: PhoneAuthCredential) {
+                // Auto-verificación completada
                 signInWithPhoneAuthCredencial(phoneAuthCredencial)
             }
 
             override fun onVerificationFailed(e: FirebaseException) {
                 progressDialog.dismiss()
-                Toast.makeText(this@LoginTelActivity,
-                    "Falló la verificación debido a ${e.message}", Toast.LENGTH_SHORT).show()
 
+                when (e) {
+                    is FirebaseTooManyRequestsException -> {
+                        mostrarErrorSnackbar("Demasiados intentos. Por favor, inténtalo más tarde.")
+                    }
+                    is FirebaseAuthInvalidCredentialsException -> {
+                        binding.etTelefonoC.error = "Número de teléfono inválido"
+                        binding.etTelefonoC.requestFocus()
+                        mostrarErrorSnackbar("Número de teléfono en formato inválido")
+                    }
+                    else -> {
+                        mostrarErrorSnackbar("Error de verificación: ${e.message}")
+                    }
+                }
             }
-
         }
+    }
 
+    private fun mostrarErrorSnackbar(mensaje: String) {
+        val snackbar = Snackbar.make(binding.root, mensaje, Snackbar.LENGTH_LONG)
+        snackbar.setAction("Aceptar") {
+            // No hacemos nada, solo cerramos el snackbar
+        }
+        snackbar.show()
+    }
 
-
-
+    override fun onBackPressed() {
+        if (binding.rlCodigoVer.visibility == View.VISIBLE) {
+            // Si estamos en la pantalla de verificación, volvemos a la pantalla de teléfono
+            binding.rlTelefono.visibility = View.VISIBLE
+            binding.rlCodigoVer.visibility = View.GONE
+        } else {
+            super.onBackPressed()
+        }
     }
 }

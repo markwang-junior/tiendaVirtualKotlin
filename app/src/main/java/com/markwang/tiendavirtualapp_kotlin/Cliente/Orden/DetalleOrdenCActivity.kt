@@ -60,12 +60,6 @@ class DetalleOrdenCActivity : AppCompatActivity() {
                 TODO("Not yet implemented")
             }
         })
-
-
-
-
-
-
     }
 
     private fun direccionCliente(){
@@ -104,7 +98,8 @@ class DetalleOrdenCActivity : AppCompatActivity() {
                 binding.idOrdenD.text = idOrden
                 binding.fechaOrdenD.text = fecha
                 binding.estadoOrdenD.text = estadoOrden
-                binding.costoOrdenD.text = costo.plus(" €")
+                // Solución para evitar símbolo € duplicado - Eliminar € si existe y luego agregarlo
+                binding.costoOrdenD.text = costo.replace(" €", "") + " €"
 
                 if (estadoOrden.equals("Solicitud recibida")){
                     binding.estadoOrdenD.setTextColor(ContextCompat.getColor(this@DetalleOrdenCActivity, R.color.azul_marino_oscuro))

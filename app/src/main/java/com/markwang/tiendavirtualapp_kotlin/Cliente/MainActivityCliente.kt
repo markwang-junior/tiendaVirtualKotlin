@@ -1,6 +1,7 @@
 package com.markwang.tiendavirtualapp_kotlin.Cliente
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -26,7 +27,9 @@ import com.markwang.tiendavirtualapp_kotlin.SeleccionarTipoActivity
 class MainActivityCliente : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainClienteBinding
-    private var firebaseAuth : FirebaseAuth?=null
+    private var firebaseAuth : FirebaseAuth? = null
+    private lateinit var prefs: SharedPreferences
+    private val PREFS_NAME = "TiendaVirtualPrefs"
 
     private var dobleClick = false
     private val handler = Handler(Looper.getMainLooper())
@@ -41,6 +44,7 @@ class MainActivityCliente : AppCompatActivity(), NavigationView.OnNavigationItem
         setSupportActionBar(toolbar)
 
         firebaseAuth = FirebaseAuth.getInstance()
+        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
         comprobarSesion()
 
         binding.navigationView.setNavigationItemSelectedListener(this)
@@ -88,20 +92,25 @@ class MainActivityCliente : AppCompatActivity(), NavigationView.OnNavigationItem
     }
 
     private fun comprobarSesion(){
-        if (firebaseAuth!!.currentUser==null){
+        if (firebaseAuth!!.currentUser == null){
             startActivity(Intent(this@MainActivityCliente, SeleccionarTipoActivity::class.java))
             finishAffinity()
-        }else {
+        } else {
             Toast.makeText(this,"Usuario en linea", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun cerrarSesion(){
+        // Limpiar las preferencias al cerrar sesión
+        val editor = prefs.edit()
+        editor.remove("user_type")
+        editor.remove("user_id")
+        editor.apply()
+
         firebaseAuth!!.signOut()
         startActivity(Intent(this@MainActivityCliente, SeleccionarTipoActivity::class.java))
         finishAffinity()
         Toast.makeText(this,"Cerraste sesión", Toast.LENGTH_SHORT).show()
-
     }
 
     private fun replaceFragment(fragment: Fragment) {

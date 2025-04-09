@@ -43,7 +43,8 @@ class AdapdadorOrdenCompra : RecyclerView.Adapter<AdapdadorOrdenCompra.HolderOrd
         val estadoOrden = ordenCompra.estadoOrden
 
         holder.idOrdenItem.text = idOrden
-        holder.costoOrdenItem.text = costo.plus(" €")
+        // Solución para evitar símbolo € duplicado - Eliminar € si existe y luego agregarlo
+        holder.costoOrdenItem.text = costo.replace(" €", "") + " €"
         holder.estadoOrdenItem.text = estadoOrden
 
         if (estadoOrden.equals("Solicitud recibida")){

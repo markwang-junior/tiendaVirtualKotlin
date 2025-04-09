@@ -1,3 +1,5 @@
+// app/src/main/java/com/markwang/tiendavirtualapp_kotlin/Cliente/Pago/PaymentActivity.kt
+
 package com.markwang.tiendavirtualapp_kotlin.Cliente.Pago
 
 import android.content.Intent
@@ -30,10 +32,10 @@ class PaymentActivity : AppCompatActivity() {
 
         // Obtener el precio total del intent
         precioTotal = intent.getStringExtra("precioTotal") ?: "0"
-        precioTotal = precioTotal.replace(" €", "").trim()
+        precioTotal = precioTotal.replace("Total: ", "").trim()
 
         // Mostrar el total a pagar
-        binding.tvTotal.text = "Total a pagar: $precioTotal €"
+        binding.tvTotal.text = "Total a pagar: ${precioTotal}"
 
         // Configurar botón de volver
         binding.btnBack.setOnClickListener {

@@ -1,116 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8F9FA"
     tools:context=".Cliente.Pago.PaymentActivity">
 
+    <!-- Barra superior -->
     <RelativeLayout
         android:id="@+id/toolbarRL"
         android:layout_width="match_parent"
-        android:layout_height="55dp">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/celeste_claro"
+        android:elevation="4dp">
 
         <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_centerVertical="true"
-            android:background="@android:color/transparent"
-            android:padding="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="12dp"
             android:src="@drawable/ico_regresar" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/pago_title"
+            android:text="Método de Pago"
+            android:textColor="#333333"
             android:textSize="18sp"
             android:textStyle="bold" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="#ccc" />
     </RelativeLayout>
 
+    <!-- Contenido principal -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbarRL"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Total a pagar con estilo más atractivo -->
         <TextView
             android:id="@+id/tvTotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
             android:text="Total a pagar: 0 €"
             android:textAlignment="center"
             android:textColor="@color/azul_marino_oscuro"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:padding="16dp"/>
 
-        <com.google.android.material.card.MaterialCardView
+        <!-- Tarjeta para métodos de pago -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            app:contentPadding="16dp">
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            android:layout_marginTop="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="@string/payment_method"
-                    android:textSize="16sp"
+                    android:text="Métodos de pago disponibles"
+                    android:textSize="18sp"
+                    android:textColor="#333333"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:text="@string/payment_method_description"
-                    android:textSize="14sp" />
+                    android:layout_marginBottom="24dp"
+                    android:text="Elige PayPal para procesar tu pago de forma segura"
+                    android:textSize="14sp"
+                    android:textColor="#666666" />
 
+                <!-- Botón de PayPal mejorado -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnPayWithPaypal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/pay_with_paypal"
+                    android:layout_height="56dp"
+                    android:text="Pagar con PayPal"
                     android:textAllCaps="false"
+                    android:textSize="16sp"
                     app:cornerRadius="8dp"
+                    android:backgroundTint="#169BD7"
                     app:icon="@drawable/paypal_icon"
-                    app:iconGravity="textStart" />
+                    app:iconGravity="textStart"
+                    app:iconTint="@null"
+                    app:iconPadding="8dp" />
 
+                <!-- ProgressBar para la carga -->
                 <ProgressBar
                     android:id="@+id/progressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
                     android:visibility="gone" />
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
+        <!-- Nota informativa -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/payment_note"
+            android:layout_marginTop="8dp"
+            android:text="Nota: Esta es una versión de prueba. No se realizará ningún cargo real."
             android:textAlignment="center"
             android:textSize="12sp"
-            android:textStyle="italic" />
-    </LinearLayout>
+            android:textStyle="italic"
+            android:textColor="#888888" />
 
-</RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

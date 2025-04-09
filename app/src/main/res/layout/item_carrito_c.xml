@@ -7,114 +7,132 @@
     app:cardCornerRadius="10dp"
     app:cardUseCompatPadding="true">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:padding="8dp">
 
-        <!--Informaciondel producto-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <!-- Imagen del producto -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imagenPCar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/item_img_producto"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small"/>
 
-            <!--Imagen del producto -->
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/imagenPCar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/item_img_producto"
-                android:layout_marginTop="2dp"
-                android:scaleType="centerCrop"/>
+        <!-- Información del producto -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp">
 
-            <!--Nombre del producto -->
+            <!-- Nombre del producto -->
             <TextView
                 android:id="@+id/nombrePCar"
                 android:text="@string/nombrePCar"
-                android:layout_toEndOf="@id/imagenPCar"
-                android:layout_marginStart="10dp"
-                android:textColor="@color/azul_marino_oscuro"
-                android:textSize="16sp"
                 android:textStyle="bold"
-                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <!--Precio Final -->
+            <!-- Precios -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+
+                <!-- Precio final -->
+                <TextView
+                    android:id="@+id/precioFinalPCar"
+                    android:text="@string/precioFinalPCar"
+                    android:textColor="@color/azul_marino_oscuro"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <!-- Precio original -->
+                <TextView
+                    android:id="@+id/precioOriginalPCar"
+                    android:text="@string/precioOriginalPCar"
+                    android:layout_marginStart="8dp"
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <!-- Stock -->
             <TextView
-                android:id="@+id/precioFinalPCar"
-                android:text="@string/precioFinalPCar"
-                android:layout_below="@id/nombrePCar"
-                android:layout_toEndOf="@id/imagenPCar"
-                android:layout_marginStart="10dp"
-                android:textSize="17sp"
+                android:id="@+id/stockIndicator"
+                android:text="En stock"
+                android:textSize="12sp"
+                android:textColor="#4CAF50"
+                android:layout_marginTop="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+        </LinearLayout>
 
-            <!--Precio original -->
-            <TextView
-                android:id="@+id/precioOriginalPCar"
-                android:text="@string/precioOriginalPCar"
-                android:layout_below="@id/precioFinalPCar"
-                android:layout_toEndOf="@id/imagenPCar"
-                android:textSize="17sp"
-                android:layout_marginStart="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-
-
-        </RelativeLayout>
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
+        <!-- Control de cantidad -->
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="bottom"
-            android:gravity="center_horizontal"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp">
+            android:layout_gravity="center_vertical">
 
-            <!--Disminuir la cantidad-->
-            <ImageButton
-                android:id="@+id/btnDisminuir"
-                android:layout_gravity="center_vertical"
-                android:background="@null"
-                android:layout_marginEnd="5dp"
-                android:src="@drawable/ico_disminuir"
+            <!-- Botones y cantidad -->
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/quantity_control_background"
+                android:padding="2dp">
 
-            <!--cantidad-->
-            <TextView
-                android:id="@+id/cantidadPCar"
-                android:text="@string/cantidadPCar"
-                android:textSize="18sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <!-- Disminuir cantidad -->
+                <ImageButton
+                    android:id="@+id/btnDisminuir"
+                    android:src="@drawable/ico_disminuir"
+                    android:background="@null"
+                    android:padding="4dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"/>
 
-            <!--Aumentar la cantidad-->
-            <ImageButton
-                android:id="@+id/btnAumentar"
-                android:layout_gravity="center_vertical"
-                android:background="@null"
-                android:layout_marginStart="5dp"
-                android:src="@drawable/ico_incrementar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <!-- Cantidad -->
+                <TextView
+                    android:id="@+id/cantidadPCar"
+                    android:text="1"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:minWidth="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-            <!--Eliminar del carrito de compras-->
+                <!-- Aumentar cantidad -->
+                <ImageButton
+                    android:id="@+id/btnAumentar"
+                    android:src="@drawable/ico_incrementar"
+                    android:background="@null"
+                    android:padding="4dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"/>
+            </LinearLayout>
+
+            <!-- Botón eliminar -->
             <ImageButton
                 android:id="@+id/btnEliminar"
                 android:src="@drawable/ico_eliminar_prod_carr"
                 android:background="@null"
-                android:layout_marginStart="30dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-
+                android:layout_marginStart="8dp"
+                android:padding="4dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"/>
+        </LinearLayout>
+    </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

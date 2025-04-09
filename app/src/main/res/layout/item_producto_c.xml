@@ -36,11 +36,7 @@
                 android:padding="7dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-
-
         </RelativeLayout>
-
-
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imagenP"
@@ -62,13 +58,10 @@
             android:textStyle="bold"
             android:maxLines="1"/>
 
-
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp">
-
 
             <!--Precio con descuento del producto-->
             <TextView
@@ -89,8 +82,6 @@
                 android:layout_toEndOf="@id/item_precio_p_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-
-
         </RelativeLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -103,5 +94,4 @@
             android:layout_height="wrap_content"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
-
 </com.google.android.material.card.MaterialCardView>

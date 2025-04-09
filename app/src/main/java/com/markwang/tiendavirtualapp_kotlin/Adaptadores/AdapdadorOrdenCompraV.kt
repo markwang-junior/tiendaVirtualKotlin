@@ -16,10 +16,10 @@ import com.markwang.tiendavirtualapp_kotlin.databinding.ItemOrdenCompraBinding
 
 class AdapdadorOrdenCompraV : RecyclerView.Adapter<AdapdadorOrdenCompraV.HolderOrdenCompra> {
 
-    private lateinit var binding : ItemOrdenCompraBinding
+    private lateinit var binding: ItemOrdenCompraBinding
 
-    private var mContext : Context
-    var ordenesArrayList : ArrayList<ModeloOrdenCompra>
+    private var mContext: Context
+    var ordenesArrayList: ArrayList<ModeloOrdenCompra>
 
     constructor(mContext: Context, ordenesArrayList: ArrayList<ModeloOrdenCompra>) {
         this.mContext = mContext
@@ -28,7 +28,7 @@ class AdapdadorOrdenCompraV : RecyclerView.Adapter<AdapdadorOrdenCompraV.HolderO
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HolderOrdenCompra {
         binding = ItemOrdenCompraBinding.inflate(LayoutInflater.from(mContext), parent, false)
-        return  HolderOrdenCompra(binding.root)
+        return HolderOrdenCompra(binding.root)
     }
 
     override fun getItemCount(): Int {
@@ -44,16 +44,27 @@ class AdapdadorOrdenCompraV : RecyclerView.Adapter<AdapdadorOrdenCompraV.HolderO
         val estadoOrden = ordenCompra.estadoOrden
 
         holder.idOrdenItem.text = idOrden
-        holder.costoOrdenItem.text = costo.plus(" €")
+        // Solución para evitar símbolo € duplicado - Eliminar € si existe y luego agregarlo
+        holder.costoOrdenItem.text = costo.replace(" €", "") + " €"
         holder.estadoOrdenItem.text = estadoOrden
 
-        if (estadoOrden.equals("Solicitud recibida")){
-            holder.estadoOrdenItem.setTextColor(ContextCompat.getColor(mContext, R.color.azul_marino_oscuro))
-        }else if(estadoOrden.equals("En preparación")){
+        if (estadoOrden.equals("Solicitud recibida")) {
+            holder.estadoOrdenItem.setTextColor(
+                ContextCompat.getColor(
+                    mContext,
+                    R.color.azul_marino_oscuro
+                )
+            )
+        } else if (estadoOrden.equals("En preparación")) {
             holder.estadoOrdenItem.setTextColor(ContextCompat.getColor(mContext, R.color.naranja))
-        }else if (estadoOrden.equals("Entregado")){
-            holder.estadoOrdenItem.setTextColor(ContextCompat.getColor(mContext, R.color.verde_oscuro2))
-        }else if (estadoOrden.equals("Cancelado")){
+        } else if (estadoOrden.equals("Entregado")) {
+            holder.estadoOrdenItem.setTextColor(
+                ContextCompat.getColor(
+                    mContext,
+                    R.color.verde_oscuro2
+                )
+            )
+        } else if (estadoOrden.equals("Cancelado")) {
             holder.estadoOrdenItem.setTextColor(ContextCompat.getColor(mContext, R.color.rojo))
         }
 
@@ -69,13 +80,11 @@ class AdapdadorOrdenCompraV : RecyclerView.Adapter<AdapdadorOrdenCompraV.HolderO
 
     }
 
-    inner class HolderOrdenCompra (itemView : View) : RecyclerView.ViewHolder(itemView){
+    inner class HolderOrdenCompra(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var idOrdenItem = binding.idOrdenItem
         var fechaOrdenItem = binding.fechaOrdenItem
         var estadoOrdenItem = binding.estadoOrdenItem
         var costoOrdenItem = binding.costoOrdenItem
         var ibSiguiente = binding.ibSiguiente
     }
-
-
 }

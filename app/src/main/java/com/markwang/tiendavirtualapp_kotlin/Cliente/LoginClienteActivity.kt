@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +12,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.FirebaseDatabase
 import com.markwang.tiendavirtualapp_kotlin.Constantes
@@ -86,7 +90,6 @@ class LoginClienteActivity : AppCompatActivity() {
         } else {
             loginCliente()
         }
-
     }
 
     private fun loginCliente() {
@@ -99,25 +102,46 @@ class LoginClienteActivity : AppCompatActivity() {
                 startActivity(Intent(this, MainActivityCliente::class.java))
                 finishAffinity()
                 Toast.makeText(this, "Bienvenido", Toast.LENGTH_SHORT).show()
-
             }
             .addOnFailureListener { e ->
-                Toast.makeText(
-                    this,
-                    "No se pudo iniciar sesión debido a ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                progressDialog.dismiss()
+
+                // Mejorar el manejo de errores
+                when (e) {
+                    is FirebaseAuthInvalidUserException -> {
+                        // Email no existe
+                        mostrarErrorSnackbar("El correo electrónico no está registrado")
+                        binding.etEmail.error = "Correo no registrado"
+                        binding.etEmail.requestFocus()
+                    }
+                    is FirebaseAuthInvalidCredentialsException -> {
+                        // Contraseña incorrecta
+                        mostrarErrorSnackbar("Contraseña incorrecta")
+                        binding.etPassword.error = "Contraseña incorrecta"
+                        binding.etPassword.requestFocus()
+                    }
+                    else -> {
+                        // Otro error
+                        mostrarErrorSnackbar("Error al iniciar sesión: ${e.message}")
+                    }
+                }
             }
+    }
+
+    private fun mostrarErrorSnackbar(mensaje: String) {
+        val snackbar = Snackbar.make(binding.root, mensaje, Snackbar.LENGTH_LONG)
+        snackbar.setAction("Reintentar") {
+            // No hacemos nada, solo cerramos el snackbar
+        }
+        snackbar.show()
     }
 
     private fun googleLogin() {
         val googleSignInClient = mGoogleSignInClient.signInIntent
         googleSignInARL.launch(googleSignInClient)
-
     }
 
     private val googleSignInARL = registerForActivityResult(
-
         ActivityResultContracts.StartActivityForResult()
     ) { resultado ->
         if (resultado.resultCode == RESULT_OK) {
@@ -128,17 +152,19 @@ class LoginClienteActivity : AppCompatActivity() {
                 val cuenta = task.getResult(ApiException::class.java)
                 autenticacionGoogle(cuenta.idToken)
             } catch (e: Exception) {
-                Toast.makeText(this, "${e.message}", Toast.LENGTH_SHORT).show()
+                progressDialog.dismiss()
+                mostrarErrorSnackbar("Error con Google: ${e.message}")
             }
         } else {
-            Toast.makeText(this, "La operación de logeo ha sido cancelada", Toast.LENGTH_SHORT)
-                .show()
+            progressDialog.dismiss()
+            mostrarErrorSnackbar("Operación de login con Google cancelada")
         }
-
-
     }
 
     private fun autenticacionGoogle(idToken: String?) {
+        progressDialog.setMessage("Autenticando con Google")
+        progressDialog.show()
+
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         firebaseAuth.signInWithCredential(credential)
             .addOnSuccessListener { resultadoAuth ->
@@ -147,15 +173,15 @@ class LoginClienteActivity : AppCompatActivity() {
                     llenarInfoBD()
                 } else {
                     //si el usuario ya se registró con anterioridad
+                    progressDialog.dismiss()
                     startActivity(Intent(this, MainActivityCliente::class.java))
                     finishAffinity()
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "${e.message}", Toast.LENGTH_SHORT).show()
-
+                progressDialog.dismiss()
+                mostrarErrorSnackbar("Error con Google: ${e.message}")
             }
-
     }
 
     private fun llenarInfoBD() {
@@ -194,7 +220,7 @@ class LoginClienteActivity : AppCompatActivity() {
             }
             .addOnFailureListener { e ->
                 progressDialog.dismiss()
-                Toast.makeText(this, "${e.message}", Toast.LENGTH_SHORT).show()
+                mostrarErrorSnackbar("Error al guardar datos: ${e.message}")
             }
     }
 }

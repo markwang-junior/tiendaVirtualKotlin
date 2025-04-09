@@ -315,36 +315,17 @@ class DetalleOrdenVActivity : AppCompatActivity() {
                 binding.idOrdenD.text = idOrden
                 binding.fechaOrdenD.text = fecha
                 binding.estadoOrdenD.text = estadoOrden
-                binding.costoOrdenD.text = costo.plus(" €")
+                // Solución para evitar símbolo € duplicado - Eliminar € si existe y luego agregarlo
+                binding.costoOrdenD.text = costo.replace(" €", "") + " €"
 
                 if (estadoOrden.equals("Solicitud recibida")) {
-                    binding.estadoOrdenD.setTextColor(
-                        ContextCompat.getColor(
-                            this@DetalleOrdenVActivity,
-                            R.color.azul_marino_oscuro
-                        )
-                    )
+                    binding.estadoOrdenD.setTextColor(ContextCompat.getColor(this@DetalleOrdenVActivity, R.color.azul_marino_oscuro))
                 } else if (estadoOrden.equals("En preparación")) {
-                    binding.estadoOrdenD.setTextColor(
-                        ContextCompat.getColor(
-                            this@DetalleOrdenVActivity,
-                            R.color.naranja
-                        )
-                    )
+                    binding.estadoOrdenD.setTextColor(ContextCompat.getColor(this@DetalleOrdenVActivity, R.color.naranja))
                 } else if (estadoOrden.equals("Entregado")) {
-                    binding.estadoOrdenD.setTextColor(
-                        ContextCompat.getColor(
-                            this@DetalleOrdenVActivity,
-                            R.color.verde_oscuro2
-                        )
-                    )
+                    binding.estadoOrdenD.setTextColor(ContextCompat.getColor(this@DetalleOrdenVActivity, R.color.verde_oscuro2))
                 } else if (estadoOrden.equals("Cancelado")) {
-                    binding.estadoOrdenD.setTextColor(
-                        ContextCompat.getColor(
-                            this@DetalleOrdenVActivity,
-                            R.color.rojo
-                        )
-                    )
+                    binding.estadoOrdenD.setTextColor(ContextCompat.getColor(this@DetalleOrdenVActivity, R.color.rojo))
                 }
 
                 // Llamar a la función para cargar la dirección del cliente

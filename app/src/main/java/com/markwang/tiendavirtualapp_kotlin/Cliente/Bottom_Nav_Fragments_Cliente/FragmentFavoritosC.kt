@@ -1,8 +1,12 @@
+// app/src/main/java/com/markwang/tiendavirtualapp_kotlin/Cliente/Bottom_Nav_Fragments_Cliente/FragmentFavoritosC.kt
+// Este archivo mantiene la misma lógica pero con mejoras visuales
+
 package com.markwang.tiendavirtualapp_kotlin.Cliente.Bottom_Nav_Fragments_Cliente
 
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -92,7 +96,7 @@ class FragmentFavoritosC : Fragment() {
                             })
                     }
 
-                    Handler().postDelayed({
+                    Handler(Looper.getMainLooper()).postDelayed({
                         productoArrayList.sortBy { it.nombre }
                         productoAdapdador = AdapdadorProductoC(mContext, productoArrayList)
                         binding.favoritosRv.adapter = productoAdapdador

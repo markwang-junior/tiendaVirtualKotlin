@@ -11,28 +11,52 @@
     <LinearLayout
         android:id="@+id/carritoContenidoLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/sumaProductos"
-            android:text="@string/sumaProductos"
-            android:layout_gravity="center"
-            android:textSize="18sp"
-            android:padding="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_above="@+id/footerLayout">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/carritoRv"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_carrito_c"
-            android:layout_marginBottom="50dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
+
+    <!-- Footer Layout para Total y botón de confirmar -->
+    <RelativeLayout
+        android:id="@+id/footerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/sumaProductos"
+            android:text="@string/sumaProductos"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCrearOrden"
+            android:text="@string/btnCrearOrden"
+            android:textAllCaps="true"
+            app:icon="@drawable/ico_confirmar"
+            app:iconGravity="textEnd"
+            app:cornerRadius="8dp"
+            android:layout_below="@id/sumaProductos"
+            android:backgroundTint="@color/azul_marino_oscuro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
 
     <!-- Layout para carrito vacío -->
     <RelativeLayout
@@ -77,20 +101,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ir_a_tienda"
+                android:backgroundTint="@color/celeste_claro"
                 app:cornerRadius="8dp"/>
         </LinearLayout>
     </RelativeLayout>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCrearOrden"
-        android:text="@string/btnCrearOrden"
-        android:textAllCaps="true"
-        app:icon="@drawable/ico_confirmar"
-        app:iconGravity="textEnd"
-        app:cornerRadius="8dp"
-        android:layout_alignParentBottom="true"
-        android:backgroundTint="@color/azul_marino_oscuro"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

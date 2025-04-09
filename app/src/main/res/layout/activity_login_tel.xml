@@ -1,111 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:padding="15dp"
-    android:orientation="vertical"
-    android:gravity="bottom"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/auth_background"
     tools:context=".Cliente.LoginTelActivity">
 
-    <TextView
-        android:text="@string/txtLoginTelC"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:text="@string/txtLoginMensaje"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/login_telefono"/>
-
-    <RelativeLayout
-        android:id="@+id/rlTelefono"
-        android:padding="10dp"
-        android:visibility="visible"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <com.hbb20.CountryCodePicker
-            android:id="@+id/telCodePicker"
-            android:layout_marginEnd="8dp"
-            app:ccp_autoDetectCountry="true"
-            app:ccp_rememberLastSelection="true"
-            app:ccp_showFlag="false"
-            app:ccp_showNameCode="false"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:id="@+id/etTelefonoC"
-            android:hint="@string/etTelefonoC"
-            android:layout_toEndOf="@id/telCodePicker"
-            android:inputType="phone"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center_horizontal">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnEnviarCodigo"
-            android:text="@string/btnEnviarCodigo"
-            android:layout_marginTop="15dp"
-            android:layout_below="@id/etTelefonoC"
-            android:textAllCaps="true"
-            app:cornerRadius="8dp"
-            android:backgroundTint="@color/azul_marino_oscuro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <!-- Indicador de progreso -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
 
-    </RelativeLayout>
+                <View
+                    android:layout_width="24dp"
+                    android:layout_height="4dp"
+                    android:background="@drawable/progress_active"
+                    android:layout_marginEnd="4dp"/>
 
-    <RelativeLayout
-        android:id="@+id/rlCodigoVer"
-        android:visibility="visible"
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+                <View
+                    android:layout_width="24dp"
+                    android:layout_height="4dp"
+                    android:background="@drawable/progress_inactive"/>
+            </LinearLayout>
 
-        <EditText
-            android:id="@+id/etCodVer"
-            android:hint="@string/etCodVer"
-            android:inputType="number"
-            android:gravity="center"
-            android:maxLength="6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnVerificarCod"
-            android:text="@string/btnVerificarCod"
-            android:layout_below="@id/etCodVer"
-            android:layout_marginTop="15dp"
-            android:textAllCaps="true"
-            app:cornerRadius="8dp"
-            android:backgroundTint="@color/azul_marino_oscuro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <!-- Ilustración -->
+            <ImageView
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:src="@drawable/login_telefono"
+                android:layout_marginTop="32dp"/>
 
-        <TextView
-            android:id="@+id/tvReenviarCod"
-            android:text="@string/tvReenviarCod"
-            android:layout_below="@id/btnVerificarCod"
-            android:layout_centerHorizontal="true"
-            android:padding="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            <!-- Título y subtítulo -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txtLoginTelC"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:textAlignment="center"
+                android:layout_marginTop="24dp"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txtLoginMensaje"
+                android:textSize="16sp"
+                android:textColor="#757575"
+                android:textAlignment="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="32dp"/>
 
-    </RelativeLayout>
+            <!-- Vista de teléfono (Primera pantalla) -->
+            <LinearLayout
+                android:id="@+id/rlTelefono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+                <!-- Tarjeta para el selector de país y entrada de teléfono -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp"
+                    android:layout_marginBottom="24dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="8dp">
+
+                        <!-- Selector de país con bandera -->
+                        <com.hbb20.CountryCodePicker
+                            android:id="@+id/telCodePicker"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:ccp_autoDetectCountry="true"
+                            app:ccp_showFlag="true"
+                            app:ccp_showNameCode="true"
+                            app:ccp_showFullName="false"
+                            app:ccp_padding="8dp"
+                            app:ccp_textSize="16sp"/>
+
+                        <!-- Línea divisoria vertical -->
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="36dp"
+                            android:background="#E0E0E0"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"/>
+
+                        <!-- Campo de entrada de teléfono -->
+                        <EditText
+                            android:id="@+id/etTelefonoC"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/etTelefonoC"
+                            android:inputType="phone"
+                            android:background="@null"
+                            android:padding="12dp"
+                            android:textSize="16sp"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Botón para enviar código -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEnviarCodigo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btnEnviarCodigo"
+                    android:textAllCaps="false"
+                    app:cornerRadius="12dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:backgroundTint="@color/azul_marino_oscuro"/>
+
+                <!-- Texto de política de privacidad -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Al continuar, acepta recibir un SMS para verificar su número. Se aplican tarifas estándar de mensajería."
+                    android:textSize="12sp"
+                    android:textColor="#757575"
+                    android:textAlignment="center"
+                    android:layout_marginTop="16dp"/>
+            </LinearLayout>
+
+            <!-- Vista de código de verificación (Segunda pantalla) -->
+            <LinearLayout
+                android:id="@+id/rlCodigoVer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- Tarjeta para entrada de código -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp"
+                    android:layout_marginBottom="24dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ingrese el código de verificación"
+                            android:textAlignment="center"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp"/>
+
+                        <EditText
+                            android:id="@+id/etCodVer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/etCodVer"
+                            android:inputType="number"
+                            android:maxLength="6"
+                            android:gravity="center"
+                            android:textSize="24sp"
+                            android:background="@null"
+                            android:padding="12dp"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Botón para verificar código -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnVerificarCod"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btnVerificarCod"
+                    android:textAllCaps="false"
+                    app:cornerRadius="12dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:backgroundTint="@color/azul_marino_oscuro"/>
+
+                <!-- Opción para reenviar código -->
+                <TextView
+                    android:id="@+id/tvReenviarCod"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tvReenviarCod"
+                    android:textColor="@color/azul_marino_oscuro"
+                    android:textAlignment="center"
+                    android:padding="16dp"
+                    android:layout_marginTop="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

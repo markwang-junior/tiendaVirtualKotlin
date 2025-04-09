@@ -1,3 +1,5 @@
+// app/src/main/java/com/markwang/tiendavirtualapp_kotlin/Cliente/Bottom_Nav_Fragments_Cliente/FragmentCarritoC.kt
+
 package com.markwang.tiendavirtualapp_kotlin.Cliente.Bottom_Nav_Fragments_Cliente
 
 import android.content.Context
@@ -136,7 +138,16 @@ class FragmentCarritoC : Fragment() {
                         if (precioFinal!=null){
                             suma += precioFinal.toDouble()
                         }
-                        binding.sumaProductos.setText("Total: ${suma.toString().plus(" €")}")
+                    }
+
+                    // Establecer el texto del total
+                    binding.sumaProductos.setText("Total: ${suma.toString().plus(" €")}")
+
+                    // Mostrar/ocultar el texto del total dependiendo de si hay productos
+                    if (snapshot.childrenCount.toInt() == 0) {
+                        binding.sumaProductos.visibility = View.INVISIBLE
+                    } else {
+                        binding.sumaProductos.visibility = View.VISIBLE
                     }
                 }
 
@@ -167,10 +178,12 @@ class FragmentCarritoC : Fragment() {
                         binding.carritoContenidoLayout.visibility = View.GONE
                         binding.btnCrearOrden.visibility = View.GONE
                         binding.carritoVacioLayout.visibility = View.VISIBLE
+                        binding.sumaProductos.visibility = View.INVISIBLE
                     } else {
                         binding.carritoContenidoLayout.visibility = View.VISIBLE
                         binding.btnCrearOrden.visibility = View.VISIBLE
                         binding.carritoVacioLayout.visibility = View.GONE
+                        binding.sumaProductos.visibility = View.VISIBLE
                     }
                 }
 

@@ -3,7 +3,9 @@ package com.markwang.tiendavirtualapp_kotlin.Adaptadores
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,10 +28,7 @@ import com.markwang.tiendavirtualapp_kotlin.DetalleProducto.DetalleProductoActiv
 import com.markwang.tiendavirtualapp_kotlin.Filtro.FiltroProducto
 import com.markwang.tiendavirtualapp_kotlin.Modelos.ModeloProducto
 import com.markwang.tiendavirtualapp_kotlin.R
-import com.markwang.tiendavirtualapp_kotlin.databinding.ItemProductoBinding
 import com.markwang.tiendavirtualapp_kotlin.databinding.ItemProductoCBinding
-import org.w3c.dom.Text
-import kotlin.math.cos
 
 class AdapdadorProductoC : RecyclerView.Adapter<AdapdadorProductoC.HolderProducto>, Filterable {
 
@@ -62,37 +61,36 @@ class AdapdadorProductoC : RecyclerView.Adapter<AdapdadorProductoC.HolderProduct
 
         val nombre = modeloProducto.nombre
 
-
         cargarPrimeraImg(modeloProducto, holder)
         visualizarDescuento(modeloProducto, holder)
         comprobarFavorito(modeloProducto, holder)
 
         holder.item_nombre_p.text = "${nombre}"
 
-        //Eventp al presionar en el imageButton Favorito
+        // Evento al presionar en el imageButton Favorito
         holder.Ib_fav.setOnClickListener {
             val favorito = modeloProducto.favorito
 
-            if (favorito){
-                //Favorito = true
+            if (favorito) {
+                // Favorito = true
                 Constantes().eliminarProductoFav(mContext, modeloProducto.id)
-            }else{
-                //Favorito = false
+            } else {
+                // Favorito = false
                 Constantes().agregarProductoFav(mContext, modeloProducto.id)
             }
         }
-        //Evento para dirigirnos a la actividad de detalle
+
+        // Evento para dirigirnos a la actividad de detalle
         holder.itemView.setOnClickListener {
             val intent = Intent(mContext, DetalleProductoActivity::class.java)
             intent.putExtra("idProducto", modeloProducto.id)
             mContext.startActivity(intent)
         }
 
-        //Evento para agregar al carrito el producto seleccionado
+        // Evento para agregar al carrito el producto seleccionado
         holder.agregar_carrito.setOnClickListener {
             verCarrito(modeloProducto)
         }
-
     }
 
     var costo : Double = 0.0
@@ -100,7 +98,7 @@ class AdapdadorProductoC : RecyclerView.Adapter<AdapdadorProductoC.HolderProduct
     var cantidadProd : Int = 0
 
     private fun verCarrito(modeloProducto: ModeloProducto) {
-        //Declar vistas
+        // Declarar vistas
         var imagenSIV : ShapeableImageView
         var nombreTv : TextView
         var descripcionTv : TextView
@@ -112,10 +110,13 @@ class AdapdadorProductoC : RecyclerView.Adapter<AdapdadorProductoC.HolderProduct
         var cantidadTv : TextView
         var btnAumentar : ImageButton
         var btnAgregarCarrito : MaterialButton
+        var caracteristicasTv : TextView
 
         val dialog = Dialog(mContext)
-        dialog.setContentView(R.layout.carrito_compras)//Hcemos la referencia a la vista (carrito de compras)
+        dialog.setContentView(R.layout.carrito_compras) // Conservamos el mismo nombre de archivo
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)) // Fondo transparente para el dialog
 
+        // Inicializar vistas
         imagenSIV = dialog.findViewById(R.id.imagenPCar)
         nombreTv = dialog.findViewById(R.id.nombrePCar)
         descripcionTv = dialog.findViewById(R.id.descripcionPCar)
@@ -127,67 +128,112 @@ class AdapdadorProductoC : RecyclerView.Adapter<AdapdadorProductoC.HolderProduct
         cantidadTv = dialog.findViewById(R.id.cantidadPCar)
         btnAumentar = dialog.findViewById(R.id.btnAumentar)
         btnAgregarCarrito = dialog.findViewById(R.id.btnAgregarCarrito)
+        caracteristicasTv = dialog.findViewById(R.id.caracteristicasPCar)
 
-        /*obtener los datos del modelo*/
+        /* Obtener los datos del modelo */
         val productoId = modeloProducto.id
         val nombre = modeloProducto.nombre
         val descripcion = modeloProducto.descripcion
         val precio = modeloProducto.precio
         val precioDesc = modeloProducto.precioDesc
         val notaDesc = modeloProducto.notaDesc
+        val categoria = modeloProducto.categoria
 
-        if (!precioDesc.equals("0") && !notaDesc.equals("")){
-            /*El producto si tiene descuento*/
+        // Determinar características genéricas según la categoría o tipo de producto
+        val caracteristicasTexto = StringBuilder()
+
+        // Estas son características genéricas que pueden aplicarse a la mayoría de productos
+        caracteristicasTexto.append("✅ Producto de alta calidad\n")
+        caracteristicasTexto.append("✅ Diseño exclusivo\n")
+
+        // Detectar tipo de producto por categoría o nombre
+        when {
+            categoria.contains("Camisa", ignoreCase = true)
+                    || categoria.contains("Ropa", ignoreCase = true)
+                    || nombre.contains("Camisa", ignoreCase = true) -> {
+                caracteristicasTexto.append("✅ Material duradero\n")
+                caracteristicasTexto.append("✅ Fácil de lavar")
+            }
+            categoria.contains("Funko", ignoreCase = true)
+                    || nombre.contains("Funko", ignoreCase = true) -> {
+                caracteristicasTexto.append("✅ Coleccionable oficial\n")
+                caracteristicasTexto.append("✅ Edición limitada")
+            }
+            categoria.contains("Libro", ignoreCase = true)
+                    || nombre.contains("Libro", ignoreCase = true) -> {
+                caracteristicasTexto.append("✅ Acabado de calidad\n")
+                caracteristicasTexto.append("✅ Envío protegido")
+            }
+            else -> {
+                // Características genéricas adicionales para cualquier producto
+                caracteristicasTexto.append("✅ Envío rápido\n")
+                caracteristicasTexto.append("✅ Garantía incluida")
+            }
+        }
+
+        caracteristicasTv.text = caracteristicasTexto.toString()
+
+        if (!precioDesc.equals("0") && !notaDesc.equals("")) {
+            /* El producto sí tiene descuento */
             notaDescTv.visibility = View.VISIBLE
             precioDescuentoTv.visibility = View.VISIBLE
 
-            notaDescTv.setText(notaDesc)
-            precioDescuentoTv.setText(precioDesc.plus(" €")) //80 €
-            precioOriginalTv.setText(precio.plus(" €"))
-            precioOriginalTv.paintFlags = precioOriginalTv.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG //Marca como tachado
-            costo = precioDesc.toDouble()/*Precio almacena el precio con descuento*/
-        }else{
-            /*El producto no tiene descuento*/
-            precioOriginalTv.setText(precio.plus(" €"))
-            precioOriginalTv.paintFlags = precioOriginalTv.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()//Quitamos el tachado
-            costo = precio.toDouble() /*precio almacena el precio original*/
+            notaDescTv.text = notaDesc
+            precioDescuentoTv.text = precioDesc.plus(" €") // 80 €
+            precioOriginalTv.text = precio.plus(" €")
+            precioOriginalTv.paintFlags = precioOriginalTv.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG // Marca como tachado
+            costo = precioDesc.toDouble() /* Precio almacena el precio con descuento */
+        } else {
+            /* El producto no tiene descuento */
+            notaDescTv.visibility = View.GONE
+            precioDescuentoTv.visibility = View.GONE
+
+            precioOriginalTv.text = precio.plus(" €")
+            precioOriginalTv.paintFlags = precioOriginalTv.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv() // Quitamos el tachado
+            costo = precio.toDouble() /* precio almacena el precio original */
         }
 
-        /*Setear la informacion*/
-        nombreTv.setText(nombre)
-        descripcionTv.setText(descripcion)
+        /* Setear la información */
+        nombreTv.text = nombre
+
+        // Descripción sin adornos específicos
+        descripcionTv.text = descripcion
 
         costoFinal = costo
         cantidadProd = 1
 
-        /*Incrementar cantidad*/
+        /* Incrementar cantidad */
         btnAumentar.setOnClickListener {
-            costoFinal = costoFinal +costo
+            costoFinal = costoFinal + costo
             cantidadProd++
 
-            precioFinalTv.text = costoFinal.toString()
+            // Actualizar precio final con formato de moneda
+            precioFinalTv.text = String.format("%.2f €", costoFinal)
             cantidadTv.text = cantidadProd.toString()
         }
 
-        /*Disminuir cantidad*/
+        /* Disminuir cantidad */
         btnDisminuir.setOnClickListener {
-            /*disminuir solo si la cantidad es mayor a 1*/
-            if (cantidadProd > 1){
-                costoFinal = costoFinal-costo
+            /* disminuir solo si la cantidad es mayor a 1 */
+            if (cantidadProd > 1) {
+                costoFinal = costoFinal - costo
                 cantidadProd--
 
-                precioFinalTv.text = costoFinal.toString()
+                // Actualizar precio final con formato de moneda
+                precioFinalTv.text = String.format("%.2f €", costoFinal)
                 cantidadTv.text = cantidadProd.toString()
             }
         }
 
-        precioFinalTv.text = costo.toString()
+        // Inicializar precio final con formato
+        precioFinalTv.text = String.format("%.2f €", costo)
 
-        /*Obtener primera imagen*/
+        /* Obtener primera imagen */
         cargarImg(productoId, imagenSIV)
 
         btnAgregarCarrito.setOnClickListener {
             agregarCarrito(mContext, modeloProducto, costoFinal, cantidadProd)
+            dialog.dismiss()
         }
 
         dialog.show()
@@ -195,9 +241,7 @@ class AdapdadorProductoC : RecyclerView.Adapter<AdapdadorProductoC.HolderProduct
     }
 
     private fun agregarCarrito(mContext: Context, modeloProducto: ModeloProducto, costoFinal: Double, cantidadProd: Int) {
-
         val firebaseAuth = FirebaseAuth.getInstance()
-
         val hashMap = HashMap<String, Any>()
 
         hashMap["idProducto"] = modeloProducto.id
@@ -216,7 +260,6 @@ class AdapdadorProductoC : RecyclerView.Adapter<AdapdadorProductoC.HolderProduct
             .addOnFailureListener { e->
                 Toast.makeText(mContext, "${e.message}", Toast.LENGTH_SHORT).show()
             }
-
     }
 
     private fun cargarImg(productoId: String, imagenSIV: ShapeableImageView) {
@@ -240,7 +283,7 @@ class AdapdadorProductoC : RecyclerView.Adapter<AdapdadorProductoC.HolderProduct
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-
+                    // Error al cargar la imagen
                 }
             })
     }
@@ -261,7 +304,7 @@ class AdapdadorProductoC : RecyclerView.Adapter<AdapdadorProductoC.HolderProduct
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                    // Error en la base de datos
                 }
             })
     }
@@ -297,7 +340,7 @@ class AdapdadorProductoC : RecyclerView.Adapter<AdapdadorProductoC.HolderProduct
     private fun cargarPrimeraImg(modeloProducto: ModeloProducto, holder: AdapdadorProductoC.HolderProducto) {
         val idProducto = modeloProducto.id
 
-        val  ref = FirebaseDatabase.getInstance().getReference("Productos")
+        val ref = FirebaseDatabase.getInstance().getReference("Productos")
         ref.child(idProducto).child("Imagenes")
             .limitToFirst(1)
             .addValueEventListener(object : ValueEventListener {
@@ -311,13 +354,13 @@ class AdapdadorProductoC : RecyclerView.Adapter<AdapdadorProductoC.HolderProduct
                                 .placeholder(R.drawable.item_img_producto)
                                 .into(holder.imagenP)
                         }catch (e:Exception){
-
+                            // Error al cargar imagen
                         }
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                    // Error en la base de datos
                 }
             })
     }
@@ -338,5 +381,4 @@ class AdapdadorProductoC : RecyclerView.Adapter<AdapdadorProductoC.HolderProduct
         }
         return filtro as FiltroProducto
     }
-
 }
