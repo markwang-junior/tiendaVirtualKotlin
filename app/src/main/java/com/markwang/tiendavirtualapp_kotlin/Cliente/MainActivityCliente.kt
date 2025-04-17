@@ -30,6 +30,10 @@ class MainActivityCliente : AppCompatActivity(), NavigationView.OnNavigationItem
     private var firebaseAuth : FirebaseAuth? = null
     private lateinit var prefs: SharedPreferences
     private val PREFS_NAME = "TiendaVirtualPrefs"
+    private val USER_TYPE_KEY = "user_type"
+    private val USER_ID_KEY = "user_id"
+    private val USER_LOGGED_IN = "user_logged_in"
+    private val AUTH_PROVIDER = "auth_provider"
 
     private var dobleClick = false
     private val handler = Handler(Looper.getMainLooper())
@@ -93,24 +97,41 @@ class MainActivityCliente : AppCompatActivity(), NavigationView.OnNavigationItem
 
     private fun comprobarSesion(){
         if (firebaseAuth!!.currentUser == null){
+            // No hay sesión, limpiar preferencias y redirigir
+            limpiarPreferencias()
             startActivity(Intent(this@MainActivityCliente, SeleccionarTipoActivity::class.java))
             finishAffinity()
         } else {
+            // Hay sesión, actualizar estado de preferencias
+            val editor = prefs.edit()
+            editor.putBoolean(USER_LOGGED_IN, true)
+            editor.putString(USER_ID_KEY, firebaseAuth!!.currentUser!!.uid)
+            editor.apply()
+
             Toast.makeText(this,"Usuario en linea", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun cerrarSesion(){
         // Limpiar las preferencias al cerrar sesión
-        val editor = prefs.edit()
-        editor.remove("user_type")
-        editor.remove("user_id")
-        editor.apply()
+        limpiarPreferencias()
 
+        // Cerrar sesión en Firebase
         firebaseAuth!!.signOut()
+
+        // Redirigir a pantalla de selección de tipo
         startActivity(Intent(this@MainActivityCliente, SeleccionarTipoActivity::class.java))
         finishAffinity()
         Toast.makeText(this,"Cerraste sesión", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun limpiarPreferencias() {
+        val editor = prefs.edit()
+        editor.remove(USER_TYPE_KEY)
+        editor.remove(USER_ID_KEY)
+        editor.remove(USER_LOGGED_IN)
+        editor.remove(AUTH_PROVIDER)
+        editor.apply()
     }
 
     private fun replaceFragment(fragment: Fragment) {

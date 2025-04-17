@@ -3,6 +3,8 @@ package com.markwang.tiendavirtualapp_kotlin.Cliente
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -32,8 +34,12 @@ class LoginTelActivity : AppCompatActivity() {
     private var forceResendingToken : ForceResendingToken? = null
     private lateinit var mCallback : OnVerificationStateChangedCallbacks
     private var mVerification : String? = null
+
+    // Variables para manejo mejorado de intentos
     private var numeroIntentos = 0
     private val MAX_INTENTOS = 3
+    private val COOLDOWN_TIME = 60000L // 60 segundos de espera
+    private var lastAttemptTime = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,18 +77,35 @@ class LoginTelActivity : AppCompatActivity() {
         }
 
         binding.tvReenviarCod.setOnClickListener {
+            val currentTime = System.currentTimeMillis()
+
             if (forceResendingToken != null) {
                 if (numeroIntentos < MAX_INTENTOS) {
                     reenviarCodVer()
                     numeroIntentos++
+                    lastAttemptTime = currentTime
+
+                    // Actualiza el texto para mostrar cuántos intentos quedan
+                    val intentosRestantes = MAX_INTENTOS - numeroIntentos
+                    Toast.makeText(this, "Te quedan $intentosRestantes intentos", Toast.LENGTH_SHORT).show()
                 } else {
-                    mostrarErrorSnackbar("Has excedido el número máximo de intentos. Inténtalo más tarde.")
+                    // Verifica si ha pasado suficiente tiempo para resetear
+                    if (currentTime - lastAttemptTime > COOLDOWN_TIME) {
+                        // Reset del contador
+                        numeroIntentos = 0
+                        reenviarCodVer()
+                        numeroIntentos++
+                        lastAttemptTime = currentTime
+                    } else {
+                        // Calcula cuánto tiempo falta para poder intentar de nuevo
+                        val tiempoRestante = (COOLDOWN_TIME - (currentTime - lastAttemptTime)) / 1000
+                        mostrarErrorSnackbar("Has excedido el número máximo de intentos. Espera $tiempoRestante segundos.")
+                    }
                 }
             } else {
                 mostrarErrorSnackbar("No se puede reenviar el código todavía")
             }
         }
-
     }
 
     private fun verificarCodTel(otp: String) {
@@ -148,13 +171,13 @@ class LoginTelActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 progressDialog.dismiss()
                 // Dirigir a MainActivityCliente con bandera para abrir perfil
-                val intent = Intent(this, MainActivityCliente::class.java)
+                val intent = Intent(this@LoginTelActivity, MainActivityCliente::class.java)
                 intent.putExtra("ABRIR_PERFIL", true)
                 startActivity(intent)
                 finishAffinity()
                 Toast.makeText(this, "Bienvenido. Por favor completa tu perfil", Toast.LENGTH_LONG).show()
             }
-            .addOnFailureListener { e ->
+            .addOnFailureListener {e->
                 progressDialog.dismiss()
                 mostrarErrorSnackbar("Error al guardar datos: ${e.message}")
             }
@@ -243,7 +266,15 @@ class LoginTelActivity : AppCompatActivity() {
 
                 when (e) {
                     is FirebaseTooManyRequestsException -> {
-                        mostrarErrorSnackbar("Demasiados intentos. Por favor, inténtalo más tarde.")
+                        // Esto indica que se superó el límite de Firebase
+                        numeroIntentos = MAX_INTENTOS // Forzar el cooldown
+                        lastAttemptTime = System.currentTimeMillis()
+                        mostrarErrorSnackbar("Demasiados intentos. Por favor, inténtalo después de 1 hora o usa otro método de login.")
+
+                        // Opcional: redireccionar al usuario a otro método de login
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            finish() // Volver a la pantalla anterior
+                        }, 3000)
                     }
                     is FirebaseAuthInvalidCredentialsException -> {
                         binding.etTelefonoC.error = "Número de teléfono inválido"
